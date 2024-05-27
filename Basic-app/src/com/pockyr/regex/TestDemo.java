@@ -36,5 +36,11 @@ public class TestDemo {
         for (String s : splits) {
             System.out.println(s);
         }
+
+        // 将重复的部分只保留一个
+        String aTest = "我是是是一个个个好好好好好好好人啊啊啊啊啊啊";
+        // \\1 为转义的1: '\1'，对前面括号中的部分添加索引，在后面用$1指代
+        String result = aTest.replaceAll("(.)\\1+", "$1");
+        System.out.println(result);  // 我是一个好人啊
     }
 }
