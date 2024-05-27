@@ -47,9 +47,15 @@ public class ArraysDemo {
         Arrays.sort(students, (x, y) -> y.getAge() - x.getAge());
         System.out.println(Arrays.toString(students));
 
-        // 使用比较类的静态方法
+        // 使用比较类的静态方法引用
         Arrays.sort(students, CompareByAge::compareByAge);
+        // 本质是: Arrays.sort(students, (o1, o2) -> CompareByAge.compareByAge(o1, o2));
         System.out.println(Arrays.toString(students));
 
+        // 使用比较类的实例方法引用
+        CompareByAge cba = new CompareByAge();
+        Arrays.sort(students, cba::compareByAgeNotStatic);
+        // 本质是: Arrays.sort(students, (o1, o2) -> cba.compareByAgeNotStatic(o1, o2));
+        System.out.println(Arrays.toString(students));
     }
 }
