@@ -31,5 +31,10 @@ public class TestDemo {
         }
         String dataReplaced = data.replaceAll("\\d{2}、Java高级", "你猜高不高级?");
         System.out.println(dataReplaced);
+
+        String[] splits = dataReplaced.split("你猜高不高级\\?");
+        for (String s : splits) {
+            System.out.println(s);
+        }
     }
 }
