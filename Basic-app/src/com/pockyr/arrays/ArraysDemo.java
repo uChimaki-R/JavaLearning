@@ -46,5 +46,10 @@ public class ArraysDemo {
         // 使用lambda表达式简化
         Arrays.sort(students, (x, y) -> y.getAge() - x.getAge());
         System.out.println(Arrays.toString(students));
+
+        // 使用比较类的静态方法
+        Arrays.sort(students, CompareByAge::compareByAge);
+        System.out.println(Arrays.toString(students));
+
     }
 }
