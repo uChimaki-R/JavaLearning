@@ -18,9 +18,9 @@ public class TestDemo {
                 ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, 5, 10, TimeUnit.SECONDS,
                         new ArrayBlockingQueue<>(5), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy())
         ) {
-            Callable<String> callable = new MyTread(10);
-            Future<String> future = threadPoolExecutor.submit(callable);
-            System.out.println(future.get());
+            threadPoolExecutor.execute(new MyTread());
+            threadPoolExecutor.execute(new MyTread());
+            threadPoolExecutor.execute(new MyTread());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
