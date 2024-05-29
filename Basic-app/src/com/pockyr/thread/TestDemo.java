@@ -1,17 +1,25 @@
 package com.pockyr.thread;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
 public class TestDemo {
     public static void main(String[] args) {
-        Thread t1 = new Thread(TestDemo::doSomething);
+        // 创建一个实现了Callable接口的类实例
+        Callable<String> callable = new MyTread(100);
+        // 使用FutureTask包装该类实例，使之成为一个任务对象
+        FutureTask<String> futureTask = new FutureTask<>(callable);
+        // 将该任务对象传递到Thread的初始化参数中
+        Thread t1 = new Thread(futureTask);
+        // 启动该任务
         t1.start();
-        for (int i = 0; i < 10; i++) {
-            System.out.println("主线程输出: " + i);
-        }
-    }
-
-    public static void doSomething() {
-        for (int i = 0; i < 10; i++) {
-            System.out.println("子线程输出: " + i);
+        // 使用FutureTask.get方法获取子进程执行结果
+        try {
+            String result = futureTask.get();
+            System.out.println(result);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
         }
     }
 }
