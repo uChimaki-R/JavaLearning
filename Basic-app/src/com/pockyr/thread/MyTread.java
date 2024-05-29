@@ -17,6 +17,6 @@ public class MyTread implements Callable<String> {
         for (int i = 1; i <= n; i++) {
             sum += i;
         }
-        return "result: " + sum;
+        return Thread.currentThread().getName() + " got result: " + sum;
     }
 }
