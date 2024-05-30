@@ -4,6 +4,7 @@ package com.pockyr.reflect;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 public class TestReflect {
@@ -34,7 +35,7 @@ public class TestReflect {
             System.out.println(constructor.getName() + " --> parameter counts: " + constructor.getParameterCount());
         }
         System.out.println("--------------------------------------------");
-        // 使用 getDeclaredConstructors 获取全部构造器，下面的 getDeclaredConstructor 同理
+        // 使用 getDeclaredConstructors 获取全部构造器，后续同理
         Constructor[] cs2 = c.getDeclaredConstructors();
         for (Constructor constructor : cs2) {
             System.out.println(constructor.getName() + " --> parameter counts: " + constructor.getParameterCount());
@@ -47,7 +48,7 @@ public class TestReflect {
 
         // 使用构造器初始化对象
         try {
-            // 此构造函数在类内是private修饰的，可以通过setAccessible取消检查，强制反射，会破坏类的封装性
+            // 此构造函数在类内是private修饰的，可以通过setAccessible取消检查，暴力反射，会破坏类的封装性
             constructor.setAccessible(true);
 
             Cat cat = (Cat) constructor.newInstance("neko", 12);
@@ -55,5 +56,25 @@ public class TestReflect {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void testGetField() throws NoSuchFieldException {
+        // 获取类的成员变量
+        Class c = Cat.class;
+        Field[] fs = c.getDeclaredFields();
+        for (Field f : fs) {
+            System.out.println(f.getName() + ": " + f.getType());
+        }
+        // 用于实例对象的取值和赋值
+        Cat cat = new Cat("neko", 12);
+        Field field = c.getDeclaredField("name");
+        field.setAccessible(true);
+        try {
+            field.set(cat, "silo");  // 设置私有的变量信息
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(cat.getName());
     }
 }
