@@ -13,6 +13,9 @@ public class SocketDemo {
                 Socket socket = new Socket(InetAddress.getLocalHost(), 8888)
         ) {
             System.out.println("----------ClientSocket started----------");
+            // 开启线程不断接受来自服务端的转发数据
+            new Thread(new SocketClientThread(socket)).start();
+
             Scanner scanner = new Scanner(System.in);
             try (
                     OutputStream out = socket.getOutputStream();
@@ -20,7 +23,7 @@ public class SocketDemo {
                     DataOutputStream dos = new DataOutputStream(out)
             ) {
                 while (true) {
-                    System.out.print("input: ");
+//                    System.out.print("input: ");
                     String message = scanner.nextLine();
                     if (message.equals("exit")) {
                         System.out.println("----------exit----------");
@@ -29,7 +32,7 @@ public class SocketDemo {
                     dos.writeUTF(message);
                     // 使用flush及时送出数据
                     dos.flush();
-                    System.out.println("----------send----------");
+//                    System.out.println("----------send----------");
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
