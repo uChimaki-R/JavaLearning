@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class TestReflect {
     @Test
@@ -71,10 +73,35 @@ public class TestReflect {
         Field field = c.getDeclaredField("name");
         field.setAccessible(true);
         try {
-            field.set(cat, "silo");  // 设置私有的变量信息
+            field.set(cat, "ShiLo");  // 设置私有的变量信息
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
         System.out.println(cat.getName());
+    }
+
+    @Test
+    public void testGetMethod(){
+        // 获取类的成员方法
+        Class c = Cat.class;
+        Method[] ms = c.getDeclaredMethods();
+        for (Method m : ms) {
+            System.out.println(m.getName() + ": " + Arrays.toString(m.getParameters()) + " --> " + m.getReturnType());
+        }
+        // 获取指定的成员方法
+        try {
+            Method method = c.getDeclaredMethod("saySomething", String.class, int.class);
+            System.out.println(method);
+            // 使用反射调用执行方法
+            method.setAccessible(true);
+            Cat cat = new Cat("ShiLo", 12);
+            try {
+                method.invoke(cat, "nia~", 5);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
