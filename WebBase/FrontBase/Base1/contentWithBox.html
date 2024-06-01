@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- 盒子模型 -->
+<!-- 从内向往: 内容content 内边距padding 边框border 外边距margin -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I am title</title>
+    <style>
+        a {
+            color: red;
+            text-decoration: none;
+        }
+
+        p {
+            text-indent: 50px;
+            text-align: left;
+            line-height: 30px;
+        }
+
+        #content {
+            width: 70%;
+            margin: 0 auto;
+            /* 等价于 margin: 0 15% 0 15%; */
+            /* 四个参数顺序为: 上 右 下 左 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <h1 style="color: blue;">Big</h1>
+
+        <span id="hi">
+            <a href="https://www.bilibili.com/video/BV1m84y1w7Tb" target="_blank">You?</a>
+        </span>
+        <span class="ccc">
+            <a href="https://www.bilibili.com/" target="_self">Man!!What can I say? </a>
+        </span>
+        <h6 style="color: blueviolet;">Small</h6>
+
+        <!-- p标签包裹段落
+        br标签换行 -->
+        <!-- html中无论输入多少空格都只显示一个，空格占位符为 &nbsp; -->
+        <p>
+            <!-- b标签加粗字体 strong标签强调字体 -->
+            <b>Arthur Engoron</b> hit Donald Trump with his biggest punishment to date on Friday, in a ruling that fined
+            the
+            former president $355 million for fraudulently inflating the values of his properties.
+        </p>
+
+        <p>
+            Engoron found Trump liable for fraud, conspiracy and issuing false financial statements and false business
+            records, and he barred him from serving as director of a company in New York for three years. But while he
+            stopped short of dissolving the Trump Organization altogether, Engoron issued a blistering 93-page opinion
+            that
+            painted the former president as unremorseful and highly likely to commit fraud again
+
+        </p>
+    </div>
+</body>
+
+</html>
