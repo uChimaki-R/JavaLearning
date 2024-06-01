@@ -13,9 +13,12 @@
 <body>
 
     <div id="app">
-        <input type="text" v-model="message">
-        <!-- 插值表达式 -->
-        {{message}}
+        <a v-bind:href="url">Link 1</a>
+        <!-- 简化写法 -->
+        <a :href="url">Link 2</a>
+        
+        <!-- 通过输入动态改变a标签的链接 -->
+        <input type="text" v-model="url">
     </div>
 
 </body>
@@ -25,7 +28,7 @@
         {
             el: "#app",  // Vue接管的区域
             data: {
-                message: "Hello Vue"
+                url: "https://www.baidu.com"
             }
         }
     )
