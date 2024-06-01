@@ -5,11 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello Js</title>
-    <script src="js/jsDOM.js"></script>
+    <script src="js/jsEvent.js"></script>
 </head>
 
 <body>
-
+    <br>
+    <input id="btn1" type="button" onclick="buttonOnClick()" value="按钮1">
+    <input id="btn2" type="button" value="按钮2">
 </body>
+
+<script>
+    // 通过标签属性绑定
+    function buttonOnClick() {
+        alert("button1 clicked!!!");
+    }
+    // 通过onclick方法绑定
+    // 注意onclick是 = 赋值 而不是用 ()
+    document.getElementById("btn2").onclick = function () {
+        alert("button2 clicked!!!");
+    }
+</script>
 
 </html>
