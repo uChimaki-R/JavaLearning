@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入vue.js文件 -->
+    <!-- from https://unpkg.com/vue@2.7.16/dist/vue.js -->
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <input type="text" v-model="message">
+        <!-- 插值表达式 -->
+        {{message}}
+    </div>
+
+</body>
+<script>
+    // 定义Vue对象
+    new Vue(
+        {
+            el: "#app",  // Vue接管的区域
+            data: {
+                message: "Hello Vue"
+            }
+        }
+    )
+</script>
+
+</html>
