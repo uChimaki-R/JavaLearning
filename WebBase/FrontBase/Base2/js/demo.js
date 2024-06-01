@@ -72,3 +72,18 @@ document.writeln(parseInt("a110"));  // NaN
 // null和undefined都是false
 
 // 流程控制语句基本一致
+
+// 函数 形参和返回值类型都不需要声明
+function functionName(a, b){
+    return a + b;
+}
+
+var result = functionName(12, 13);
+document.writeln(result);
+
+// 可以使用变量接收
+var testFunc = function functionName(a, b){
+    return a + b;
+}
+// 可以传递超过参数列表个数的形参，多余的不会被接收
+document.writeln(testFunc(10, 20, 10, 10));
