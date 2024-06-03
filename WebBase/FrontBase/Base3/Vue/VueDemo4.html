@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <div v-for="(item, index) in list" :key="index">{{index}}: {{item}}</div>
+        <hr>
+        <div v-for="item in list">{{item}}</div>
+    </div>
+
+</body>
+<script>
+    new Vue(
+        {
+            el: "#app",
+            data: {
+                list: [12, "北京", "Java", 'C', 3.14, true]
+            },
+        }
+    )
+</script>
+
+</html>
