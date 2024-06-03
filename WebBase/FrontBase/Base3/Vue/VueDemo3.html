@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        年龄<input type="text" v-model="age">经判定, 为:
+        <br>
+        <span v-if="age <= 35">年轻人</span>
+        <span v-else-if="age > 35 && age < 60">中年人</span>
+        <span v-else>老年人</span>
+
+        <br><br>
+        
+        <!-- 效果相同，但是下面这种会把标签渲染出来，
+            只是通过css样式 style="display: none;" 隐藏 -->
+        年龄<input type="text" v-model="age">经判定, 为:
+        <br>
+        <span v-show="age <= 35">年轻人</span>
+        <span v-show="age > 35 && age < 60">中年人</span>
+        <span v-show="age >= 60">老年人</span>
+    </div>
+
+</body>
+<script>
+    new Vue(
+        {
+            el: "#app",
+            data: {
+                age: 20
+            },
+        }
+    )
+</script>
+
+</html>
