@@ -9,7 +9,9 @@
       <el-button type="warning">警告按钮</el-button>
       <el-button type="danger">危险按钮</el-button>
     </el-row>
-    <br>
+
+    <br />
+
     <!-- 表格 -->
     <el-table
       :data="tableData"
@@ -20,6 +22,16 @@
       <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
       <el-table-column prop="address" label="地址"> </el-table-column>
     </el-table>
+
+    <!-- 分页组件 -->
+    <el-pagination
+      background
+      layout="prev, pager, next, jumper, sizes"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :total="1000"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -52,10 +64,19 @@ export default {
     };
   },
   methods: {
-    tableRowClassName({ rowIndex }) {
-      if (rowIndex === 1) {
+    // 每页展示数据数量变化时
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    // 当前页码发生变化时
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+
+    tableRowClassName(item) {
+      if (item.rowIndex === 1) {
         return "warning-row";
-      } else if (rowIndex === 3) {
+      } else if (item.rowIndex === 3) {
         return "success-row";
       }
       return "";
