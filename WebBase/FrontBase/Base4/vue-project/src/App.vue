@@ -1,32 +1,25 @@
+<!-- 定义html代码 -->
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+  <div>
+    <h1>{{ message }}</h1>
   </div>
 </template>
 
+<!-- 定义js代码，定义vue的数据模型和方法 -->
+<script>
+// export后才能在其他js文件中导入
+export default {
+  // 数据模型定义的不是对象，而是返回对象的函数
+  data() {
+    return {
+      message: "Hello Vue",
+    };
+  },
+  // 定义方法
+  methods: {},
+};
+</script>
+
+<!-- 定义css样式 -->
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
