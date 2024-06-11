@@ -24,7 +24,7 @@
           </el-form-item>
         </el-form>
         <!-- Table -->
-        <el-table :data="tableData" border>
+        <el-table :data="tableData">
           <el-table-column prop="rank" label="排名"> </el-table-column>
           <el-table-column prop="title" label="名称"> </el-table-column>
           <el-table-column label="图片">
