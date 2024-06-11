@@ -26,7 +26,9 @@ public class RequestController {
 
     @RequestMapping("/pojoParams")
     public String GetSomePojoParams(User user) {
+        // 复杂实体类中的简单实体类对象的数据(假设对象名为address)，请求需要传递参数为address.city="xxx" address.street="xxx"
         System.out.println(user);
+        // User{name='Tom', age=20, address=Address{city='广州', street='天河'}}
         return "OK";
     }
 }
