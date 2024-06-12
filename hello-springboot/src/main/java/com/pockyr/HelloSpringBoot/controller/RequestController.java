@@ -3,10 +3,12 @@ package com.pockyr.HelloSpringBoot.controller;
 //import jakarta.servlet.http.HttpServletRequest;
 
 import com.pockyr.HelloSpringBoot.pojo.User;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,6 +50,13 @@ public class RequestController {
     public String GetSomeListParams(@RequestParam List<String> objs) {
         // 对一个请求参数的多个数据传递可以包装成容器，容器都需要加上@RequestParam注释，否则会报错
         System.out.println(objs);
+        return "OK";
+    }
+
+    @RequestMapping("/dateParam")
+    public String GetDateParam(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime updateDate) {
+        // 接收日期时间类数据，需要使用@DateTimeFormat注解声明数据格式
+        System.out.println(updateDate);
         return "OK";
     }
 }
