@@ -4,6 +4,7 @@ package com.pockyr.HelloSpringBoot.controller;
 
 import com.pockyr.HelloSpringBoot.pojo.User;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,6 +58,14 @@ public class RequestController {
     public String GetDateParam(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime updateDate) {
         // 接收日期时间类数据，需要使用@DateTimeFormat注解声明数据格式
         System.out.println(updateDate);
+        return "OK";
+    }
+
+    @RequestMapping("/jsonParams")
+    public String GetSomeJsonParams(@RequestBody List<User> users) {
+        // 传递json格式数据，也需要名称一一对应，参数需要使用@RequestBody注解
+        System.out.println(users);
+        // [User{name='Tom', age=12, address=Address{city='Beijing', street='ChaoYang'}}, User{name='Mary', age=18, address=Address{city='Guangzhou', street='BaiYun'}}]
         return "OK";
     }
 }
