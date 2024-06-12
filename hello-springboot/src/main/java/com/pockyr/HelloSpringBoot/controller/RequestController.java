@@ -6,6 +6,10 @@ import com.pockyr.HelloSpringBoot.pojo.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 @RestController
 public class RequestController {
 //    @RequestMapping("/params")
@@ -29,6 +33,14 @@ public class RequestController {
         // 复杂实体类中的简单实体类对象的数据(假设对象名为address)，请求需要传递参数为address.city="xxx" address.street="xxx"
         System.out.println(user);
         // User{name='Tom', age=20, address=Address{city='广州', street='天河'}}
+        return "OK";
+    }
+
+    @RequestMapping("/arrayParams")
+    public String GetSomeArrayParams(String[] hobby) {
+        // 对一个请求参数的多个数据传递可以包装成数组
+        System.out.println(Arrays.toString(hobby));
+        // [Java, game, badminton]
         return "OK";
     }
 }
