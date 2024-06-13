@@ -1,0 +1,19 @@
+<users>
+    <user>
+        <name>Tom</name>
+        <age>12</age>
+        <address>
+            <city>Beijing</city>
+            <street>ChaoYang</street>
+        </address>
+    </user>
+
+    <user>
+        <name>Mary</name>
+        <age>18</age>
+        <address>
+            <city>Guangzhou</city>
+            <street>BaiYun</street>
+        </address>
+    </user>
+</users>
