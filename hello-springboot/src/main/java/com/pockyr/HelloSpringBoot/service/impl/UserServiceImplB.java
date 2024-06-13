@@ -5,11 +5,11 @@ import com.pockyr.HelloSpringBoot.pojo.Address;
 import com.pockyr.HelloSpringBoot.pojo.User;
 import com.pockyr.HelloSpringBoot.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class UserServiceImplB implements UserServiceInterface {
     @Autowired
     private UserDaoInterface originDataDao;

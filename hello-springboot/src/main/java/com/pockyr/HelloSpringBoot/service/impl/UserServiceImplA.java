@@ -5,11 +5,11 @@ import com.pockyr.HelloSpringBoot.pojo.Address;
 import com.pockyr.HelloSpringBoot.pojo.User;
 import com.pockyr.HelloSpringBoot.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//@Component
+//@Service
 public class UserServiceImplA implements UserServiceInterface {
     // 先要获取数据
     @Autowired
