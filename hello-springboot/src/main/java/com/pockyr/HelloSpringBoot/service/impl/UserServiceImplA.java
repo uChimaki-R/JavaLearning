@@ -1,16 +1,19 @@
 package com.pockyr.HelloSpringBoot.service.impl;
 
 import com.pockyr.HelloSpringBoot.dao.UserDaoInterface;
-import com.pockyr.HelloSpringBoot.dao.impl.UserDaoImplA;
 import com.pockyr.HelloSpringBoot.pojo.Address;
 import com.pockyr.HelloSpringBoot.pojo.User;
 import com.pockyr.HelloSpringBoot.service.UserServiceInterface;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+//@Component
 public class UserServiceImplA implements UserServiceInterface {
     // 先要获取数据
-    UserDaoInterface originDataDao = new UserDaoImplA();
+    @Autowired
+    private UserDaoInterface originDataDao;
     @Override
     public List<User> getFormattedUsers() {
         List<User> data = originDataDao.getUsers();
