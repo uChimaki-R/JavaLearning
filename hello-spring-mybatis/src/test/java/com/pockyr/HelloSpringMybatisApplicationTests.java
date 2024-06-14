@@ -28,4 +28,9 @@ class HelloSpringMybatisApplicationTests {
          */
     }
 
+    @Test
+    void testDeleteFactory() {
+        factoryMapper.deleteFactory(7);
+    }
+
 }
