@@ -33,4 +33,8 @@ class HelloSpringMybatisApplicationTests {
         factoryMapper.deleteFactory(7);
     }
 
+    @Test
+    void testInsertFactory() {
+        factoryMapper.insertFactory(new Factory("J7", "测试厂", "广州"));
+    }
 }
