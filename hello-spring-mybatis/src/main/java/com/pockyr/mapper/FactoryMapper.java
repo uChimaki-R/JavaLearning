@@ -2,6 +2,7 @@ package com.pockyr.mapper;
 
 import com.pockyr.pojo.Factory;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -20,4 +21,8 @@ public interface FactoryMapper {
     // 有两个好处：性能好(只有参数不同的sql语句只用编译一次，后续只需要使用之前的缓存就可以)
     //           避免了sql注入，因为其实还可以使用${}，但是$是直接将内容写入sql语句，所以传递的参数中会被注入sql语句从而被入侵
     void deleteFactory(int jno);  // 可以有返回值int 返回受影响的行数
+
+    // 新增
+    @Insert("insert into j value (#{JNO}, #{JNAME}, #{JCITY})") // 使用类实例传递时#{}里面的参数名字要和类中的变量名完全一致
+    void insertFactory(Factory factory);
 }
