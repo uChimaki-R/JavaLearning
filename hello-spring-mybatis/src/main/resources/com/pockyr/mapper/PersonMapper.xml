@@ -7,11 +7,22 @@
 <mapper namespace="com.pockyr.mapper.PersonMapper">
     <!--id指向mapper类中的绑定sql语句的方法-->
     <!--有返回值的sql语句需要指定返回值类型，类型是单个行的类类型-->
+
+    <!--注解不能写进sql语句中，不然也会被包含在sql语句里而导致出错-->
+    <!--使用where标签可以动态格式化where标签中的sql语句，如去掉多余的and/or等-->
+    <!--在where标签内的标签条件都不成立时会自动去掉where标签，正好可以查出所有的数据（注意order by不要写到里面去，不然where肯定会成立而导致语法错误）-->
+    <!--使用if标签使得sql语句根据条件动态生成-->
     <select id="selectPersons" resultType="com.pockyr.pojo.Person">
         select *
         from mybatis_test
-        where name like concat('%', #{nameLike}, '%')
-          and age between #{startAge} and #{endAge}
+        <where>
+            <if test="nameLike != null">
+                name like concat('%', #{nameLike}, '%')
+            </if>
+            <if test="startAge != null and endAge != null">
+                and age between #{startAge} and #{endAge}
+            </if>
+        </where>
         order by update_time
     </select>
 </mapper>
