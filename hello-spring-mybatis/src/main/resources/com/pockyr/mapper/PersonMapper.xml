@@ -8,6 +8,11 @@
     <!--id指向mapper类中的绑定sql语句的方法-->
     <!--有返回值的sql语句需要指定返回值类型，类型是单个行的类类型-->
 
+    <!--使用sql和include标签定义可重用的sql语句-->
+    <sql id="commonSelectFromMybatisTest">
+        select id, name, age, gender, create_time, update_time from mybatis_test
+    </sql>
+
     <!--使用set标签还可以自动去除多余的","(如只有第一个条件成立时)-->
     <update id="updatePerson">
         update mybatis_test
@@ -23,8 +28,7 @@
     <!--在where标签内的标签条件都不成立时会自动去掉where标签，正好可以查出所有的数据（注意order by不要写到里面去，不然where肯定会成立而导致语法错误）-->
     <!--使用if标签使得sql语句根据条件动态生成-->
     <select id="selectPersons" resultType="com.pockyr.pojo.Person">
-        select *
-        from mybatis_test
+        <include refid="commonSelectFromMybatisTest"/>
         <where>
             <if test="nameLike != null">
                 name like concat('%', #{nameLike}, '%')
