@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -91,5 +93,11 @@ class HelloSpringMybatisApplicationTests {
         person.setGender((short) 1);
         person.setUpdateTime(LocalDateTime.now());
         personMapper.updatePerson(person);
+    }
+
+    @Test
+    void testDeletePersonsByIds(){
+        List<Integer> list = Arrays.asList(2, 3);
+        personMapper.deletePersonsByIds(list);
     }
 }
