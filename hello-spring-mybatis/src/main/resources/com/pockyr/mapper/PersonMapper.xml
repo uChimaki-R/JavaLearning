@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace指向mapper的全类名-->
+<mapper namespace="com.pockyr.mapper.PersonMapper">
+    <!--id指向mapper类中的绑定sql语句的方法-->
+    <!--有返回值的sql语句需要指定返回值类型，类型是单个行的类类型-->
+    <select id="selectPersons" resultType="com.pockyr.pojo.Person">
+        select *
+        from mybatis_test
+        where name like concat('%', #{nameLike}, '%')
+          and age between #{startAge} and #{endAge}
+        order by update_time
+    </select>
+</mapper>
