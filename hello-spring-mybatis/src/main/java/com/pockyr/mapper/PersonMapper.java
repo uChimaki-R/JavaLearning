@@ -40,7 +40,7 @@ public interface PersonMapper {
 
     // 条件查询
     // 使用xml文件来绑定sql语句，xml文件放在resources下的同名路径下
-    List<Person> selectPersons(String nameLike, short startAge, short endAge);
+    List<Person> selectPersons(String nameLike, Short startAge, Short endAge);
 
     // 更新
     @Update("update mybatis_test set name = #{name}, age = #{age}, gender = #{gender}, update_time = #{updateTime} where id = #{id}")
