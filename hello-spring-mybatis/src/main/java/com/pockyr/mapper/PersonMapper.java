@@ -42,8 +42,10 @@ public interface PersonMapper {
     // 使用xml文件来绑定sql语句，xml文件放在resources下的同名路径下
     List<Person> selectPersons(String nameLike, Short startAge, Short endAge);
 
-    // 更新
-    @Update("update mybatis_test set name = #{name}, age = #{age}, gender = #{gender}, update_time = #{updateTime} where id = #{id}")
-    // 更新数据记得要更新update_time
+//    // 下面这种如果传递进来的person没有设置好全部的参数的话，方法会传递null，导致数据被覆盖丢失，需要使用动态sql语句解决
+//    // 更新
+//    @Update("update mybatis_test set name = #{name}, age = #{age}, gender = #{gender}, update_time = #{updateTime} where id = #{id}")
+//    // 更新数据记得要更新update_time
+//    void updatePerson(Person person);
     void updatePerson(Person person);
 }
