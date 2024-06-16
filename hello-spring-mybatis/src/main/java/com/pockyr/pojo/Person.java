@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Person {
-    private int id;
+    private Integer id;
     private String name;
-    private short age;
-    private short gender;
+    private Short age;
+    private Short gender;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }
