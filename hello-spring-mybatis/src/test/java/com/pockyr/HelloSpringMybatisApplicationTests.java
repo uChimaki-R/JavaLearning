@@ -67,6 +67,19 @@ class HelloSpringMybatisApplicationTests {
     @Test
     void testSelectPersons() {
         List<Person> personList = personMapper.selectPersons("a", (short) 10, (short) 30);
+        // ==>  Preparing: select * from mybatis_test WHERE name like concat('%', ?, '%') and age between ? and ? order by update_time
+        System.out.println(personList);
+
+        personList = personMapper.selectPersons(null, (short) 10, (short) 30);
+        // ==>  Preparing: select * from mybatis_test WHERE age between ? and ? order by update_time
+        System.out.println(personList);
+
+        personList = personMapper.selectPersons("a", (short) 10, null);
+        // ==>  Preparing: select * from mybatis_test WHERE name like concat('%', ?, '%') order by update_time
+        System.out.println(personList);
+
+        personList = personMapper.selectPersons(null, null, null);
+        // ==>  Preparing: select * from mybatis_test order by update_time
         System.out.println(personList);
     }
 
