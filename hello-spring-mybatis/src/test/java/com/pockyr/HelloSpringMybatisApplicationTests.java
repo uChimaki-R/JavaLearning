@@ -1,17 +1,22 @@
 package com.pockyr;
 
 import com.pockyr.mapper.FactoryMapper;
+import com.pockyr.mapper.PersonMapper;
 import com.pockyr.pojo.Factory;
+import com.pockyr.pojo.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
 class HelloSpringMybatisApplicationTests {
     @Autowired
     private FactoryMapper factoryMapper;
+    @Autowired
+    private PersonMapper personMapper;
 
     @Test
     void testGetFactories() {
@@ -36,5 +41,18 @@ class HelloSpringMybatisApplicationTests {
     @Test
     void testInsertFactory() {
         factoryMapper.insertFactory(new Factory("J7", "测试厂", "广州"));
+    }
+
+    @Test
+    void testInsertPerson(){
+        Person person = new Person();
+        person.setName("Ben");
+        person.setAge((short)10);
+        person.setGender((short)1);
+        person.setCreateTime(LocalDateTime.now());
+        person.setUpdateTime(LocalDateTime.now());
+        personMapper.insertPerson(person);
+        // 只有在mapper中使用了 useGeneratedKeys = true 并使用 keyProperty = "id" 指明主键名称才能够获取到主键信息
+        System.out.println(person.getId()); // 否则会输出0/null
     }
 }
