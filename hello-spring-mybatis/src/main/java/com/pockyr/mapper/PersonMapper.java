@@ -19,4 +19,17 @@ public interface PersonMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("insert into mybatis_test value (#{id}, #{name}, #{age}, #{gender}, #{createTime}, #{updateTime})") // 使用类实例传递时#{}里面的参数名字要和类中的变量名完全一致
     void insertPerson(Person person);
+
+    // 查询
+    @Select("select * from mybatis_test where id = #{id}")
+    // 数据库中的列名和类中的变量名不同时无法自动匹配的解决办法：
+    // 1、起别名
+    // @Select("select id, name, age, gender, create_time createTime, update_time updateTime from mybatis_test where id = #{id}")
+    // 2、使用注解映射
+//    @Results({
+//            @Result(column = "create_time", property = "createTime"),
+//            @Result(column = "update_time", property = "updateTime")
+//    })
+    // 3、.properties文件添加配置mybatis.configuration.map-underscore-to-camel-case=true
+    Person getPerson(int id);
 }
