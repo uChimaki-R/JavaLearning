@@ -37,4 +37,9 @@ public interface PersonMapper {
     @Select("select * from mybatis_test where name like concat('%', #{nameLike}, '%') and age between #{startAge} and #{endAge} order by update_time")
 //    List<Person> getPersons(String nameLike, short startAge, short endAge); // 函数重名过不了测试
     List<Person> selectPersons(String nameLike, short startAge, short endAge);
+
+    // 更新
+    @Update("update mybatis_test set name = #{name}, age = #{age}, gender = #{gender}, update_time = #{updateTime} where id = #{id}")
+    // 更新数据记得要更新update_time
+    void updatePerson(Person person);
 }
