@@ -69,4 +69,14 @@ class HelloSpringMybatisApplicationTests {
         List<Person> personList = personMapper.selectPersons("a", (short) 10, (short) 30);
         System.out.println(personList);
     }
+
+    @Test
+    void testUpdatePerson() {
+        Person person = personMapper.getPerson(5);
+        person.setName("Bit");
+        person.setAge((short) 10);
+        person.setGender((short) 1);
+        person.setUpdateTime(LocalDateTime.now());
+        personMapper.updatePerson(person);
+    }
 }
