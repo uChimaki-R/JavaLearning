@@ -44,11 +44,11 @@ class HelloSpringMybatisApplicationTests {
     }
 
     @Test
-    void testInsertPerson(){
+    void testInsertPerson() {
         Person person = new Person();
         person.setName("Ben");
-        person.setAge((short)10);
-        person.setGender((short)1);
+        person.setAge((short) 10);
+        person.setGender((short) 1);
         person.setCreateTime(LocalDateTime.now());
         person.setUpdateTime(LocalDateTime.now());
         personMapper.insertPerson(person);
@@ -57,10 +57,16 @@ class HelloSpringMybatisApplicationTests {
     }
 
     @Test
-    void testGetPerson(){
+    void testGetPerson() {
         Person person = personMapper.getPerson(3);
         System.out.println(person);
         // Person(id=3, name=Bob, age=0, gender=1, createTime=null, updateTime=null)
         // 下划线和驼峰命名默认不会转换，可以通过 mapper的sql语句中起别名/mapper的@Results和@Result注解/.properties启用转换配置
+    }
+
+    @Test
+    void testGetPersons() {
+        List<Person> personList = personMapper.selectPersons("a", (short) 10, (short) 30);
+        System.out.println(personList);
     }
 }
