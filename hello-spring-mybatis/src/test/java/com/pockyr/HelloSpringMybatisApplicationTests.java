@@ -55,4 +55,12 @@ class HelloSpringMybatisApplicationTests {
         // 只有在mapper中使用了 useGeneratedKeys = true 并使用 keyProperty = "id" 指明主键名称才能够获取到主键信息
         System.out.println(person.getId()); // 否则会输出0/null
     }
+
+    @Test
+    void testGetPerson(){
+        Person person = personMapper.getPerson(3);
+        System.out.println(person);
+        // Person(id=3, name=Bob, age=0, gender=1, createTime=null, updateTime=null)
+        // 下划线和驼峰命名默认不会转换，可以通过 mapper的sql语句中起别名/mapper的@Results和@Result注解/.properties启用转换配置
+    }
 }
