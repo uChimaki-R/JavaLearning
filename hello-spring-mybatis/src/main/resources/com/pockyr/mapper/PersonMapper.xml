@@ -10,7 +10,12 @@
 
     <!--使用set标签还可以自动去除多余的","(如只有第一个条件成立时)-->
     <update id="updatePerson">
-        update mybatis_test set name = #{name}, age = #{age}, gender = #{gender}, update_time = #{updateTime} where id = #{id}
+        update mybatis_test
+        set name        = #{name},
+            age         = #{age},
+            gender      = #{gender},
+            update_time = #{updateTime}
+        where id = #{id}
     </update>
 
     <!--注解不能写进sql语句中，不然也会被包含在sql语句里而导致出错-->
@@ -30,4 +35,20 @@
         </where>
         order by update_time
     </select>
+
+    <!--批量删除数据-->
+    <!--
+        collection: 遍历的集合参数名
+        item: 集合中的每个元素
+        separator: 遍历出来的集合之间使用的分隔符
+        open: 拼接在遍历出来的语句之前的sql语句
+        close: 拼接在遍历出来的语句之后的sql语句
+    -->
+    <delete id="deletePersonsByIds">
+        delete from mybatis_test where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>
