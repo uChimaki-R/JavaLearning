@@ -65,7 +65,7 @@ class HelloSpringMybatisApplicationTests {
     }
 
     @Test
-    void testGetPersons() {
+    void testSelectPersons() {
         List<Person> personList = personMapper.selectPersons("a", (short) 10, (short) 30);
         System.out.println(personList);
     }
