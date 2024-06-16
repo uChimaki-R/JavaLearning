@@ -15,6 +15,9 @@ public interface PersonMapper {
     @Delete("delete from mybatis_test where id = #{id}")
     void deletePerson(int id);  // 可以有返回值int 返回受影响的行数
 
+    // 批量删除
+    void deletePersonsByIds(List<Integer> ids);
+
     // 新增
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("insert into mybatis_test value (#{id}, #{name}, #{age}, #{gender}, #{createTime}, #{updateTime})") // 使用类实例传递时#{}里面的参数名字要和类中的变量名完全一致
