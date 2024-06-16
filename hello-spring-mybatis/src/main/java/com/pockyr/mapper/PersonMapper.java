@@ -33,9 +33,13 @@ public interface PersonMapper {
     // 3、.properties文件添加配置mybatis.configuration.map-underscore-to-camel-case=true
     Person getPerson(int id);
 
+//    // 条件查询
+//    @Select("select * from mybatis_test where name like concat('%', #{nameLike}, '%') and age between #{startAge} and #{endAge} order by update_time")
+////    List<Person> getPersons(String nameLike, short startAge, short endAge); // 函数重名过不了测试
+//    List<Person> selectPersons(String nameLike, short startAge, short endAge);
+
     // 条件查询
-    @Select("select * from mybatis_test where name like concat('%', #{nameLike}, '%') and age between #{startAge} and #{endAge} order by update_time")
-//    List<Person> getPersons(String nameLike, short startAge, short endAge); // 函数重名过不了测试
+    // 使用xml文件来绑定sql语句，xml文件放在resources下的同名路径下
     List<Person> selectPersons(String nameLike, short startAge, short endAge);
 
     // 更新
