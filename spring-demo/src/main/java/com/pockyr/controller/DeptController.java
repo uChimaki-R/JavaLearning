@@ -17,6 +17,7 @@ public class DeptController {
 
     /**
      * 获取全部部门信息
+     *
      * @return 响应信息
      */
     @GetMapping("/depts")
@@ -28,6 +29,7 @@ public class DeptController {
 
     /**
      * 根据部门id获取部门信息
+     *
      * @param id 部门id
      * @return 响应信息
      */
@@ -40,6 +42,7 @@ public class DeptController {
 
     /**
      * 根据部门id删除指定部门信息
+     *
      * @param id 部门id
      * @return 响应信息
      */
@@ -52,13 +55,27 @@ public class DeptController {
 
     /**
      * 添加一个新的部门
+     *
      * @param department 部门信息(仅在body传递部门的名称)
      * @return 响应信息
      */
     @PostMapping("/depts")
-    public Result add(@RequestBody Department department){
+    public Result add(@RequestBody Department department) {
         deptService.add(department);
-        log.info("添加部门: {}", department);
+        log.info("添加部门: {}", department.getName());
+        return Result.success();
+    }
+
+    /**
+     * 根据部门id更新部门信息(名称)
+     *
+     * @param department 部门信息(在body中传递需要更新的部门id及其新的部门名称)
+     * @return 响应信息
+     */
+    @PutMapping("/depts")
+    public Result update(@RequestBody Department department) {
+        deptService.update(department);
+        log.info("更新id为{}的部门名称为: {}", department.getId(), department.getName());
         return Result.success();
     }
 }
