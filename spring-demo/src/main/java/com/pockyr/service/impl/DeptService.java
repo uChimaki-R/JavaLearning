@@ -17,4 +17,9 @@ public class DeptService implements DeptServiceInterface {
     public List<Department> getDepartments() {
         return deptMapper.getDepartments();
     }
+
+    @Override
+    public void deleteDepartments(Integer id) {
+        deptMapper.deleteDepartments(id);
+    }
 }
