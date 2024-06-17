@@ -1,10 +1,7 @@
 package com.pockyr.mapper;
 
 import com.pockyr.pojo.Department;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -21,4 +18,7 @@ public interface DeptMapperInterface {
 
     @Select("select * from dept where id = #{id}")
     Department getById(Integer id);
+
+    @Update("update dept set name = #{name}, update_time = #{updateTime} where id = #{id}")
+    void update(Department department);
 }
