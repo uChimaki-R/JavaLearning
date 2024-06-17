@@ -14,12 +14,12 @@ public class DeptService implements DeptServiceInterface {
     private DeptMapperInterface deptMapper;
 
     @Override
-    public List<Department> getDepartments() {
-        return deptMapper.getDepartments();
+    public List<Department> getAll() {
+        return deptMapper.getAll();
     }
 
     @Override
-    public void deleteDepartments(Integer id) {
-        deptMapper.deleteDepartments(id);
+    public void deleteById(Integer id) {
+        deptMapper.deleteById(id);
     }
 }

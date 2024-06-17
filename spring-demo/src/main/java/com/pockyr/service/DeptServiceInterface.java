@@ -5,7 +5,7 @@ import com.pockyr.pojo.Department;
 import java.util.List;
 
 public interface DeptServiceInterface {
-    List<Department> getDepartments();
+    List<Department> getAll();
 
-    void deleteDepartments(Integer id);
+    void deleteById(Integer id);
 }

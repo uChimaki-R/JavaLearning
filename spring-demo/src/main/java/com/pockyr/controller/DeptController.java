@@ -22,7 +22,7 @@ public class DeptController {
      */
     @GetMapping("/depts")
     public Result getDepartments() {
-        List<Department> departments = deptService.getDepartments();
+        List<Department> departments = deptService.getAll();
         return Result.success(departments);
     }
 
@@ -33,7 +33,7 @@ public class DeptController {
      */
     @DeleteMapping("/depts/{id}")
     public Result deleteDepartments(@PathVariable Integer id) {
-        deptService.deleteDepartments(id);
+        deptService.deleteById(id);
         return Result.success();
     }
 }
