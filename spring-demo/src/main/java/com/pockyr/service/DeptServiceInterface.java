@@ -8,4 +8,6 @@ public interface DeptServiceInterface {
     List<Department> getAll();
 
     void deleteById(Integer id);
+
+    void add(Department department);
 }
