@@ -27,6 +27,18 @@ public class DeptController {
     }
 
     /**
+     * 根据部门id获取部门信息
+     * @param id 部门id
+     * @return 响应信息
+     */
+    @GetMapping("/depts/{id}")
+    public Result getById(@PathVariable Integer id) {
+        Department department = deptService.getById(id);
+        log.info("查询部门: {}", department);
+        return Result.success(department);
+    }
+
+    /**
      * 根据部门id删除指定部门信息
      * @param id 部门id
      * @return 响应信息
