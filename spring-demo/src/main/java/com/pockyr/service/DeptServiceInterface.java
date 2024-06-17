@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface DeptServiceInterface {
     List<Department> getDepartments();
+
+    void deleteDepartments(Integer id);
 }
