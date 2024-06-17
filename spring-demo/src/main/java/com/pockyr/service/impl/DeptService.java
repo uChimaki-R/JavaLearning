@@ -36,4 +36,11 @@ public class DeptService implements DeptServiceInterface {
     public Department getById(Integer id) {
         return deptMapper.getById(id);
     }
+
+    @Override
+    public void update(Department department) {
+        // 设置修改时间
+        department.setUpdateTime(LocalDateTime.now());
+        deptMapper.update(department);
+    }
 }
