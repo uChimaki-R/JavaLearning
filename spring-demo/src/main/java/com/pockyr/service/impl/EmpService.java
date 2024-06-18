@@ -38,4 +38,9 @@ public class EmpService implements EmpServiceInterface {
         // 使用Page的方法获取信息
         return new PageBean(empPage.getTotal(), empPage.getResult());
     }
+
+    @Override
+    public void delete(List<Integer> ids) {
+        empMapper.delete(ids);
+    }
 }
