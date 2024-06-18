@@ -17,4 +17,6 @@ public interface EmpMapper {
     // 使用了PageHelper插件后只用使用普通的查询语句就行了，无需使用count和limit的sql语句
 //    @Select("select * from emp") // 复杂的查询使用xml文件书写
     List<Employee> selectByConditions(String namePart, Short gender, LocalDate begin, LocalDate end);
+
+    void delete(List<Integer> ids);
 }
