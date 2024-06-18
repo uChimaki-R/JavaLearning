@@ -11,6 +11,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/depts") // 如果路径前有统一的部分，可以提取到类注解上，方法中的部分可以省略
 public class DeptController {
     @Autowired
     private DeptService deptService;
@@ -20,7 +21,7 @@ public class DeptController {
      *
      * @return 响应信息
      */
-    @GetMapping("/depts")
+    @GetMapping
     public Result getAll() {
         List<Department> departments = deptService.getAll();
         log.debug("获取全部部门信息, 总数: {}", departments.size());
@@ -33,7 +34,7 @@ public class DeptController {
      * @param id 部门id
      * @return 响应信息
      */
-    @GetMapping("/depts/{id}")
+    @GetMapping("/{id}")
     public Result getById(@PathVariable Integer id) {
         Department department = deptService.getById(id);
         log.info("查询部门: {}", department);
@@ -46,7 +47,7 @@ public class DeptController {
      * @param id 部门id
      * @return 响应信息
      */
-    @DeleteMapping("/depts/{id}")
+    @DeleteMapping("/{id}")
     public Result deleteById(@PathVariable Integer id) {
         deptService.deleteById(id);
         log.info("删除部门, 部门id: {}", id);
@@ -59,7 +60,7 @@ public class DeptController {
      * @param department 部门信息(仅在body传递部门的名称)
      * @return 响应信息
      */
-    @PostMapping("/depts")
+    @PostMapping
     public Result add(@RequestBody Department department) {
         deptService.add(department);
         log.info("添加部门: {}", department.getName());
@@ -72,7 +73,7 @@ public class DeptController {
      * @param department 部门信息(在body中传递需要更新的部门id及其新的部门名称)
      * @return 响应信息
      */
-    @PutMapping("/depts")
+    @PutMapping
     public Result update(@RequestBody Department department) {
         deptService.update(department);
         log.info("更新id为{}的部门名称为: {}", department.getId(), department.getName());
