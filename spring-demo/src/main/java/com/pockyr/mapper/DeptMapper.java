@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 @Mapper
-public interface DeptMapperInterface {
+public interface DeptMapper {
     @Select("select * from dept")
     List<Department> getAll();
 
