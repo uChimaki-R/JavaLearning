@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- <![CDATA[]]>  []里放和xml格式冲突的符号，如这里的'<'会和xml的左标签符号冲突-->
+<!--也可以使用&lt;替代-->
+<mapper namespace="com.pockyr.mapper.EmpMapper">
+    <select id="selectByConditions" resultType="com.pockyr.pojo.Employee">
+        select * from emp
+        <where>
+            <if test="namePart != null and namePart != ''">
+                name like concat('%', #{namePart}, '%')
+            </if>
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+            <if test="begin != null">
+                and entry_time >= #{begin}
+            </if>
+            <if test="end != null">
+                and entry_time <![CDATA[<=]]> #{end}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+</mapper>
