@@ -18,7 +18,7 @@ public class Employee {
     private Short gender;
     private String image;
     private Short job;
-    private LocalDate entryDate;
+    private LocalDate entrydate;
     private Integer deptId;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
