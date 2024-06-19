@@ -19,7 +19,7 @@ public class DeptController {
     /**
      * 获取全部部门信息
      *
-     * @return 响应信息
+     * @return 响应信息，包含全部部门信息
      */
     @GetMapping
     public Result getAll() {
@@ -32,7 +32,7 @@ public class DeptController {
      * 根据部门id获取部门信息
      *
      * @param id 部门id
-     * @return 响应信息
+     * @return 响应信息 包含查询到的部门信息
      */
     @GetMapping("/{id}")
     public Result getById(@PathVariable Integer id) {
