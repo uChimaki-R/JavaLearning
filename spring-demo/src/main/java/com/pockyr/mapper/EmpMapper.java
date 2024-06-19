@@ -3,6 +3,7 @@ package com.pockyr.mapper;
 import com.pockyr.pojo.Employee;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,4 +25,7 @@ public interface EmpMapper {
     @Insert("insert into emp(username, name, gender, image, job, entry_date, dept_id, create_time, update_time) values " +
             "(#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})")
     void add(Employee employee);
+
+    @Select("select * from emp where id = #{id}")
+    Employee getEmployeeById(Integer id);
 }
