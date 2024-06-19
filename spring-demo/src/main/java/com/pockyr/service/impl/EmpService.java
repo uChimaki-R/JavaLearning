@@ -57,4 +57,11 @@ public class EmpService implements EmpServiceInterface {
     public Employee getEmployeeById(Integer id) {
         return empMapper.getEmployeeById(id);
     }
+
+    @Override
+    public void updateEmployeeById(Employee employee) {
+        // 补充基本信息
+        employee.setUpdateTime(LocalDateTime.now());
+        empMapper.updateEmployeeById(employee);
+    }
 }
