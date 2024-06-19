@@ -73,4 +73,16 @@ public class EmpController {
         log.info("查询员工: {}", employee);
         return Result.success(employee);
     }
+
+    /**
+     * 根据员工id修改员工信息
+     *
+     * @param employee 修改的员工信息
+     * @return 响应信息
+     */
+    @PutMapping
+    public Result updateEmployeeById(@RequestBody Employee employee) {
+        empService.updateEmployeeById(employee);
+        return Result.success();
+    }
 }
