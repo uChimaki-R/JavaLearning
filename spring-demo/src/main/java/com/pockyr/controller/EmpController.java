@@ -60,4 +60,17 @@ public class EmpController {
         log.info("添加员工: {}", employee);
         return Result.success();
     }
+
+    /**
+     * 根据员工id查询指定员工信息
+     *
+     * @param id 员工id
+     * @return 响应信息，包含查询到的员工信息
+     */
+    @GetMapping("/{id}")
+    public Result getEmployeeById(@PathVariable Integer id) {
+        Employee employee = empService.getEmployeeById(id);
+        log.info("查询员工: {}", employee);
+        return Result.success(employee);
+    }
 }
