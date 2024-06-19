@@ -24,7 +24,7 @@ public class EmpController {
      *
      * @param page     页数
      * @param pageSize 一页的数据量
-     * @return 响应信息
+     * @return 响应信息，包含PageBean实体类实例，包装了请求所需的员工数据和数据总数信息
      */
     @GetMapping
     public Result page(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize,
