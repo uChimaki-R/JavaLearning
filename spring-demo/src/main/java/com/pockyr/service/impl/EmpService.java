@@ -52,4 +52,9 @@ public class EmpService implements EmpServiceInterface {
         employee.setUpdateTime(LocalDateTime.now());
         empMapper.add(employee);
     }
+
+    @Override
+    public Employee getEmployeeById(Integer id) {
+        return empMapper.getEmployeeById(id);
+    }
 }
