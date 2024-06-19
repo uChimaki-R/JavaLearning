@@ -22,10 +22,12 @@ public interface EmpMapper {
 
     void delete(List<Integer> ids);
 
-    @Insert("insert into emp(username, name, gender, image, job, entry_date, dept_id, create_time, update_time) values " +
+    @Insert("insert into emp(username, name, gender, image, job, entrydate, dept_id, create_time, update_time) values " +
             "(#{username}, #{name}, #{gender}, #{image}, #{job}, #{entrydate}, #{deptId}, #{createTime}, #{updateTime})")
     void add(Employee employee);
 
     @Select("select * from emp where id = #{id}")
     Employee getEmployeeById(Integer id);
+
+    void updateEmployeeById(Employee employee);
 }
