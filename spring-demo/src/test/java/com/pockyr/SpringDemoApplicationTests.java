@@ -34,4 +34,16 @@ class SpringDemoApplicationTests {
         // eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVG9tIiwiZW1haWwiOiJ0b21AZ21haWwuY29tIiwiZXhwIjoxNzE4ODEyNzU5fQ.QFOManQknUB05AmCBSAudTfUmii0u1k0R29I6j_Xmro
     }
 
+    /**
+     * 解析JWT令牌
+     */
+    @Test
+    void testParseJWT() {
+        String jwt = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVG9tIiwiZW1haWwiOiJ0b21AZ21haWwuY29tIiwiZXhwIjoxNzE4ODEyNzU5fQ.QFOManQknUB05AmCBSAudTfUmii0u1k0R29I6j_Xmro";
+        String key = "TheSecretSizeShouldGreaterThan256bitsForHS256Algorithm";
+        // 只用设置key不用设置签名算法，因为jwt里的header里已经有了
+        System.out.println(Jwts.parserBuilder().setSigningKey(key).build().parse(jwt).toString());
+        // header={alg=HS256},body={name=Tom, email=tom@gmail.com, exp=1.718812759E9},signature=QFOManQknUB05AmCBSAudTfUmii0u1k0R29I6j_Xmro
+    }
+
 }
