@@ -14,4 +14,6 @@ public interface EmpServiceInterface {
     void add(Employee employee);
 
     Employee getEmployeeById(Integer id);
+
+    void updateEmployeeById(Employee employee);
 }
