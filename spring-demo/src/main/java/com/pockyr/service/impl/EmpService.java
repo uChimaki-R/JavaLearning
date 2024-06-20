@@ -64,4 +64,9 @@ public class EmpService implements EmpServiceInterface {
         employee.setUpdateTime(LocalDateTime.now());
         empMapper.updateEmployeeById(employee);
     }
+
+    @Override
+    public Employee getEmployeeByUsernameAndPassword(Employee employee) {
+        return empMapper.getEmployeeByUsernameAndPassword(employee);
+    }
 }
