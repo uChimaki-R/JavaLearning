@@ -2,6 +2,7 @@ package com.pockyr.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pockyr.annotation.RecordTime;
 import com.pockyr.mapper.EmpMapper;
 import com.pockyr.pojo.Employee;
 import com.pockyr.pojo.PageBean;
@@ -19,6 +20,7 @@ public class EmpService implements EmpServiceInterface {
     private EmpMapper empMapper;
 
     @Override
+    @RecordTime
     public PageBean page(Integer page, Integer pageSize, String namePart, Short gender, LocalDate begin, LocalDate end) {
         // 手动分页
 //        // 先获取总数
@@ -54,6 +56,7 @@ public class EmpService implements EmpServiceInterface {
     }
 
     @Override
+    @RecordTime
     public Employee getEmployeeById(Integer id) {
         return empMapper.getEmployeeById(id);
     }
