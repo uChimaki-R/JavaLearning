@@ -37,7 +37,7 @@ public class CheckLoginFilter implements Filter {
             // token为空不合法，返回提示信息
             log.info("token为空，不合法");
             // 需要自己手写返回的错误信息
-            String error = "{'code': 1, 'msg': 'NOT_LOGIN', 'data': null}";
+            String error = "{\"code\": 0, \"msg\": \"NOT_LOGIN\", \"data\": null}";
             response.getWriter().write(error);
             return;
         }
