@@ -16,4 +16,6 @@ public interface EmpServiceInterface {
     Employee getEmployeeById(Integer id);
 
     void updateEmployeeById(Employee employee);
+
+    Employee getEmployeeByUsernameAndPassword(Employee employee);
 }
