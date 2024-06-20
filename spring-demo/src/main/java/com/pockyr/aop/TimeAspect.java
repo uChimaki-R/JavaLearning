@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect // AOP类
 public class TimeAspect {
-    @Pointcut("execution(* com.pockyr.service.*.*(..))") // 将切入点表达式提取出来，提高代码的复用性
+//    @Pointcut("execution(* com.pockyr.service.*.*(..))") // 将切入点表达式提取出来，提高代码的复用性
+    @Pointcut("@annotation(com.pockyr.annotation.RecordTime)") // 使用注解标记需要执行包装的方法
     public void pointCut() {} // 使用public，在其他AOP类中也可以使用，使用全类名.pointCut()
 
     @Around("pointCut()") // 标记功能包装的方法范围(service中所有类和接口的所有方法) // 切入点表达式
