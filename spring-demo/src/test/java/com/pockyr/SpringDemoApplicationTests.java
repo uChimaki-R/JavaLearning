@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //@SpringBootTest // 无需用到web的测试方法可以把注解注释掉，提高测试的速度
 class SpringDemoApplicationTests {
@@ -40,7 +42,7 @@ class SpringDemoApplicationTests {
      */
     @Test
     void testParseJWT() {
-        String jwt = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVG9tIiwiZW1haWwiOiJ0b21AZ21haWwuY29tIiwiZXhwIjoxNzE4ODEyNzU5fQ.QFOManQknUB05AmCBSAudTfUmii0u1k0R29I6j_Xmro";
+        String jwt = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoi5byg5LiJIiwiaWQiOjIyLCJ1c2VybmFtZSI6InpoYW5nc2FuIiwiZXhwIjoxNzE4OTk1MDUyfQ.5VapYeMg4PM4GZrd41tuM5rBB0dVzfWbLXw7wdNHZto";
         String key = "TheSecretSizeShouldGreaterThan256bitsForHS256Algorithm";
         // 只用设置key不用设置签名算法，因为jwt里的header里已经有了
         System.out.println(Jwts.parserBuilder().setSigningKey(key).build().parse(jwt).toString());
@@ -62,4 +64,13 @@ class SpringDemoApplicationTests {
         System.out.println(claimStr);
     }
 
+    @Test
+    void testRegex(){
+        String s = "name=Tom, id=14.0, email=tom@gmail.com";
+        Pattern pattern = Pattern.compile("id=(\\d+)(.0)?,?");
+        Matcher matcher = pattern.matcher(s);
+        if(matcher.find()){
+            System.out.println(matcher.group(1));
+        }
+    }
 }
