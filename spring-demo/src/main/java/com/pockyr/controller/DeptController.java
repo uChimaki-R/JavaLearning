@@ -1,5 +1,6 @@
 package com.pockyr.controller;
 
+import com.pockyr.annotation.OperateLogFlag;
 import com.pockyr.pojo.Department;
 import com.pockyr.pojo.Result;
 import com.pockyr.service.impl.DeptService;
@@ -48,6 +49,7 @@ public class DeptController {
      * @return 响应信息
      */
     @DeleteMapping("/{id}")
+    @OperateLogFlag
     public Result deleteById(@PathVariable Integer id) {
         deptService.deleteById(id);
         log.info("删除部门, 部门id: {}", id);
@@ -61,6 +63,7 @@ public class DeptController {
      * @return 响应信息
      */
     @PostMapping
+    @OperateLogFlag
     public Result add(@RequestBody Department department) {
         deptService.add(department);
         log.info("添加部门: {}", department.getName());
@@ -74,6 +77,7 @@ public class DeptController {
      * @return 响应信息
      */
     @PutMapping
+    @OperateLogFlag
     public Result update(@RequestBody Department department) {
         deptService.update(department);
         log.info("更新id为{}的部门名称为: {}", department.getId(), department.getName());
