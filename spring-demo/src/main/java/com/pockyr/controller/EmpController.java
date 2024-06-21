@@ -1,5 +1,6 @@
 package com.pockyr.controller;
 
+import com.pockyr.annotation.OperateLogFlag;
 import com.pockyr.pojo.Employee;
 import com.pockyr.pojo.PageBean;
 import com.pockyr.pojo.Result;
@@ -42,6 +43,7 @@ public class EmpController {
      * @return 响应信息
      */
     @DeleteMapping("/{ids}")
+    @OperateLogFlag
     public Result delete(@PathVariable List<Integer> ids) {
         empService.delete(ids);
         log.info("删除员工数据, 被删除的id: {}", ids);
@@ -55,6 +57,7 @@ public class EmpController {
      * @return 响应信息
      */
     @PostMapping
+    @OperateLogFlag
     public Result add(@RequestBody Employee employee) {
         empService.add(employee);
         log.info("添加员工: {}", employee);
@@ -81,6 +84,7 @@ public class EmpController {
      * @return 响应信息
      */
     @PutMapping
+    @OperateLogFlag
     public Result updateEmployeeById(@RequestBody Employee employee) {
         empService.updateEmployeeById(employee);
         return Result.success();
