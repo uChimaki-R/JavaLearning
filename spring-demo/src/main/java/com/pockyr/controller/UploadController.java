@@ -1,7 +1,7 @@
 package com.pockyr.controller;
 
 import com.pockyr.pojo.Result;
-import com.pockyr.utils.QiNiuKodoUtils;
+import com.qiniu.QiNiuKodoUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
