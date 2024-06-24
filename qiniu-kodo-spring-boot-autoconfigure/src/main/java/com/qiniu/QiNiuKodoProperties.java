@@ -1,7 +1,9 @@
 package com.qiniu;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 @ConfigurationProperties(prefix = "qiniu.kodo") // prefix中开头只能小写
 public class QiNiuKodoProperties {
     private String accessKey;
