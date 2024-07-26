@@ -27,3 +27,26 @@ from student_course a,
      course b
 where a.course_id = b.id
 group by a.course_id, b.name;
+
+SELECT t1.student_id as 学生ID,
+       t1.course_id  as 课程ID,
+       t1.score      as 分数
+FROM student_course t1
+WHERE t1.id IN (select t.id
+                from (SELECT id
+                      FROM student_course
+                      ORDER BY score DESC
+                      limit 3) as t)
+ORDER BY t1.course_id, t1.score desc;
+
+(select t.student_id, t.course_id, t.score
+ from student_course t
+ where course_id = '30001'
+ order by score desc
+ limit 3)
+union
+(select b.student_id, b.course_id, b.score
+ from student_course b
+ where course_id = '30002'
+ order by score desc
+ limit 3);
