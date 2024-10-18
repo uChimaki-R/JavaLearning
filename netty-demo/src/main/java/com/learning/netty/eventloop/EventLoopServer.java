@@ -1,6 +1,7 @@
 package com.learning.netty.eventloop;
 
 import com.learning.netty.handler.LoginRequestMessageHandler;
+import com.learning.netty.handler.QuitHandler;
 import com.learning.netty.protocol.MessageCodec;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -25,7 +26,8 @@ public class EventLoopServer {
                         nioSocketChannel.pipeline()
                                 .addLast(new LengthFieldBasedFrameDecoder(1024, 12, 4))
                                 .addLast(MESSAGE_CODEC)
-                                .addLast(new LoginRequestMessageHandler());
+                                .addLast(new LoginRequestMessageHandler())
+                                .addLast(new QuitHandler());
                     }
                 });
         bootstrap.bind(8080);
