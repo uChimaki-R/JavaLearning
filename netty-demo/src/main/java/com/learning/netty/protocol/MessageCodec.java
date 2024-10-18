@@ -64,9 +64,9 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
 
         byte serializationType = byteBuf.readByte();
 
-        int sequenceId = byteBuf.readInt();
-
         int messageType = byteBuf.readByte();
+
+        int sequenceId = byteBuf.readInt();
 
         byteBuf.readByte();  // 无效字节
 
@@ -76,7 +76,7 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         byteBuf.readBytes(buffer);
         Algorithm algorithm = Algorithm.values()[serializationType];
         log.info("algorithm: {}", algorithm);
-        Message message = algorithm.deserialize(buffer.array(), Message.class);
+        Object message = algorithm.deserialize(buffer.array(), Message.getMessageClass(messageType));
 
         list.add(message);
         log.info("magicNumber: {}, version: {}, serializationType: {}, sequenceId: {}, messageType: {}", magicNumber, version, serializationType, sequenceId, messageType);
