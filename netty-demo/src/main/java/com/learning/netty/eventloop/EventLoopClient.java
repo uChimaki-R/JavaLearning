@@ -1,13 +1,13 @@
 package com.learning.netty.eventloop;
 
 import com.learning.netty.protocol.MessageCodec;
+import com.learning.netty.protocol.MyFrameDecoder;
 import com.learning.netty.protocol.domain.LoginRequestMessage;
 import com.learning.netty.protocol.domain.LoginResponseMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -30,7 +30,7 @@ public class EventLoopClient {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         nioSocketChannel.pipeline()
-                                .addLast(new LengthFieldBasedFrameDecoder(1024, 12, 4))
+                                .addLast(new MyFrameDecoder())
                                 .addLast(new MessageCodec())
                                 .addLast(new ChannelInboundHandlerAdapter() {
                                     @Override
