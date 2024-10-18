@@ -13,6 +13,7 @@
     </appender>
 
     <!--指定基础的日志输出级别-->
+    <logger name="io.netty.handler.logging.LoggingHandler" level="DEBUG"/>
     <root level="INFO">
         <appender-ref ref="console"/>
     </root>
