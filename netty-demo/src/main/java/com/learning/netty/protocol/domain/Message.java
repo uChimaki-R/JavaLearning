@@ -14,4 +14,14 @@ public class Message implements Serializable {
 
     public Integer type;
     public Integer sequenceId;
+
+    public static Class<?> getMessageClass(Integer type) {
+        switch (type) {
+            case 0:
+                return LoginRequestMessage.class;
+            case 1:
+                return LoginResponseMessage.class;
+        }
+        return null;
+    }
 }
