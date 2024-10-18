@@ -1,36 +1,43 @@
 package com.learning.netty.eventloop;
 
+import com.learning.netty.config.Config;
+import com.learning.netty.protocol.Algorithm;
+import com.learning.netty.protocol.MessageCodec;
+import com.learning.netty.protocol.MyFrameDecoder;
+import com.learning.netty.protocol.domain.LoginRequestMessage;
+import com.learning.netty.protocol.domain.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-import java.nio.charset.Charset;
-
 public class TestWithEmbeddedChannel {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         EmbeddedChannel channel = new EmbeddedChannel(
-                // 最大信息长度限制为1024字节，长度信息在0下标位置，长度信息长度为4字节，从长度信息结束后位置开始需要跳过2个字节后才是内容，最后的内容要截掉前面6个字节的内容
-                new LengthFieldBasedFrameDecoder(1024, 0, 4, 2, 6),
-                new LoggingHandler(LogLevel.DEBUG)
+                new MyFrameDecoder(),
+                new LoggingHandler(LogLevel.DEBUG),
+                new MessageCodec()
         );
 
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
-        addMessage(buffer, "Hello World!");
-        addMessage(buffer, "Netty!");
-        channel.writeInbound(buffer);
+        channel.writeOutbound(new LoginRequestMessage("zhangsan", "123"));
+        System.out.println("=====================================================================");
+        ByteBuf buf = getInput(new LoginRequestMessage("zhangsan", "123"));
+        channel.writeInbound(buf);
     }
 
-    private static void addMessage(ByteBuf buffer, String message) {
-        // 这里面可以理解为一个最基本的协议，而 LengthFieldBasedFrameDecoder 的参数就是根据这个协议的结构来的，从而解决半包粘包问题
-        // 构造消息
-        byte[] bytes = message.getBytes(Charset.defaultCharset());
-        // 长度信息用int存，刚好4字节
+    private static ByteBuf getInput(Message message) throws Exception {
+        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
+        buffer.writeBytes(new byte[]{1, 2, 3, 4});
+        buffer.writeByte(1);
+        Algorithm algorithm = Config.getAlgorithm();
+        buffer.writeByte(algorithm.ordinal());
+        buffer.writeByte(message.getType());
+        buffer.writeInt(message.getSequenceId());
+        buffer.writeByte(0xff);
+        byte[] bytes = algorithm.serialize(message);
         buffer.writeInt(bytes.length);
-        // 假设中间有两个字节的版本信息
-        buffer.writeBytes("v1".getBytes(Charset.defaultCharset()));
         buffer.writeBytes(bytes);
+        return buffer;
     }
 }
