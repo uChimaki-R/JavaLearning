@@ -5,8 +5,8 @@ import com.learning.netty.protocol.domain.LoginRequestMessage;
 import com.learning.netty.protocol.domain.LoginResponseMessage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -28,17 +28,13 @@ public class EventLoopServer {
                         nioSocketChannel.pipeline()
                                 .addLast(new LengthFieldBasedFrameDecoder(1024, 12, 4))
                                 .addLast(MESSAGE_CODEC)
-                                .addLast(new ChannelInboundHandlerAdapter(){
+                                .addLast(new SimpleChannelInboundHandler<LoginRequestMessage>() {
                                     @Override
-                                    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                                        if (msg instanceof LoginRequestMessage) {
-                                            LoginRequestMessage loginRequestMessage = (LoginRequestMessage) msg;
+                                    protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginRequestMessage loginRequestMessage) throws Exception {
                                             log.info("接收到登录请求 {}", loginRequestMessage);
                                             LoginResponseMessage loginResponseMessage = new LoginResponseMessage("zhangsan".equals(loginRequestMessage.getUsername()) && "123".equals(loginRequestMessage.getPassword()));
                                             log.info("返回登录结果 {}", loginResponseMessage);
-                                            ctx.writeAndFlush(loginResponseMessage);
-                                        }
-                                        super.channelRead(ctx, msg);
+                                            channelHandlerContext.writeAndFlush(loginResponseMessage);
                                     }
                                 });
                     }

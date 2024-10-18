@@ -34,19 +34,6 @@ public class EventLoopClient {
                                 .addLast(new MessageCodec())
                                 .addLast(new ChannelInboundHandlerAdapter() {
                                     @Override
-                                    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                                        if (msg instanceof LoginResponseMessage) {
-                                            LoginResponseMessage loginResponseMessage = (LoginResponseMessage) msg;
-                                            log.info("获取到登陆结果 {}", loginResponseMessage);
-                                            if (loginResponseMessage.getSuccess()) {
-                                                LOGIN_SUCCESS.set(true);
-                                            }
-                                            LOGIN_LOCK.countDown();
-                                        }
-                                        super.channelRead(ctx, msg);
-                                    }
-
-                                    @Override
                                     public void channelActive(ChannelHandlerContext ctx) throws Exception {
                                         log.info("连接成功，开始登录");
                                         // 连接进入登录界面，开启新线程处理登录逻辑
@@ -75,6 +62,16 @@ public class EventLoopClient {
                                             ctx.channel().close();
                                         }).start();
                                         super.channelActive(ctx);
+                                    }
+                                })
+                                .addLast(new SimpleChannelInboundHandler<LoginResponseMessage>() {
+                                    @Override
+                                    protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginResponseMessage loginResponseMessage) throws Exception {
+                                        log.info("获取到登陆结果 {}", loginResponseMessage);
+                                        if (loginResponseMessage.getSuccess()) {
+                                            LOGIN_SUCCESS.set(true);
+                                        }
+                                        LOGIN_LOCK.countDown();
                                     }
                                 });
                     }
