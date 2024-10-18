@@ -1,5 +1,6 @@
 package com.learning.netty.protocol;
 
+import com.learning.netty.config.Config;
 import com.learning.netty.protocol.domain.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -7,10 +8,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.List;
 
 // public class MessageCodec extends ByteToMessageCodec<Message>
@@ -36,7 +33,9 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         // 1字节 协议版本号
         buffer.writeByte(1);
         // 1字节 序列化方式（如使用0标记为jdk，1标记为json）
-        buffer.writeByte(0);  // 这里简单点直接写死
+        Algorithm algorithm = Config.getAlgorithm();
+        log.info("algorithm: {}", algorithm);
+        buffer.writeByte(algorithm.ordinal());
         // 1字节 信息类型
         buffer.writeByte(message.getType());
         // 4字节 信息的序列号（信息可能是分割异步发送的，异步接收后需要根据序列号重组消息）
@@ -47,11 +46,7 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         buffer.writeByte(0xff);
 
         // 数据部分
-        // 将数据序列化，这里简单点直接当jdk来序列化，写入object流，从内部的byte流获取byte数据
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
-        byte[] bytes = bos.toByteArray();
+        byte[] bytes = algorithm.serialize(message);
         // 4字节 长度信息
         buffer.writeInt(bytes.length);
         // 数据内容
@@ -79,8 +74,9 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
 
         ByteBuf buffer = channelHandlerContext.alloc().heapBuffer(length);
         byteBuf.readBytes(buffer);
-        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(buffer.array()));
-        Message message = (Message) ois.readObject();  // 转换为Message对象
+        Algorithm algorithm = Algorithm.values()[serializationType];
+        log.info("algorithm: {}", algorithm);
+        Message message = algorithm.deserialize(buffer.array(), Message.class);
 
         list.add(message);
         log.info("magicNumber: {}, version: {}, serializationType: {}, sequenceId: {}, messageType: {}", magicNumber, version, serializationType, sequenceId, messageType);
