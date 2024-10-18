@@ -27,6 +27,12 @@
             <version>4.1.92.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83</version>
+        </dependency>
+
         <!-- 日志输出 -->
         <!-- 添加slf4j日志api -->
         <dependency>
