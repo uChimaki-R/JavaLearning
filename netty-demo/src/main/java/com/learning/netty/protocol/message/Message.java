@@ -1,4 +1,4 @@
-package com.learning.netty.protocol.domain;
+package com.learning.netty.protocol.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,17 +12,21 @@ import java.io.Serializable;
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public Integer type;
     public Integer sequenceId;
+    public MessageType messageType;
 
-    public static Class<?> getMessageClass(Integer type) {
+    public static Class<?> getMessageClass(MessageType type) {
         switch (type) {
-            case 0:
+            case LoginRequestMessage:
                 return LoginRequestMessage.class;
-            case 1:
+            case LoginResponseMessage:
                 return LoginResponseMessage.class;
-            case 2:
+            case PingMessage:
                 return PingMessage.class;
+            case RpcRequestMessage:
+                return RpcRequestMessage.class;
+            case RpcResponseMessage:
+                return RpcResponseMessage.class;
         }
         return null;
     }
