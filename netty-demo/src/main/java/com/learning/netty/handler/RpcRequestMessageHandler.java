@@ -25,7 +25,7 @@ public class RpcRequestMessageHandler extends SimpleChannelInboundHandler<RpcReq
                 Object result = method.invoke(impl, rpcRequestMessage.getParams());
                 channelHandlerContext.writeAndFlush(new RpcResponseMessage(rpcRequestMessage.getSequenceId(), true, null, result));
             } catch (Exception e) {
-                channelHandlerContext.writeAndFlush(new RpcResponseMessage(rpcRequestMessage.getSequenceId(), false, e.getMessage() == null ? "函数调用出错" : e.getMessage(), null));
+                channelHandlerContext.writeAndFlush(new RpcResponseMessage(rpcRequestMessage.getSequenceId(), false, "调用出错: " + e.getCause().getMessage(), null));
             }
         } else {
             channelHandlerContext.writeAndFlush(new RpcResponseMessage(rpcRequestMessage.getSequenceId(), false, "没有找到实现类", null));
