@@ -1,18 +1,14 @@
 package com.learning.netty.eventloop;
 
+import com.learning.netty.handler.RpcResponseMessageHandler;
 import com.learning.netty.protocol.MessageCodec;
 import com.learning.netty.protocol.MyFrameDecoder;
-import com.learning.netty.protocol.message.LoginRequestMessage;
-import com.learning.netty.protocol.message.LoginResponseMessage;
-import com.learning.netty.protocol.message.PingMessage;
+import com.learning.netty.protocol.message.*;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.timeout.IdleState;
-import io.netty.handler.timeout.IdleStateEvent;
-import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -39,17 +35,18 @@ public class EventLoopClient {
                                 .addLast(new LoggingHandler())
                                 .addLast(new MessageCodec())
                                 .addLast(new LoggingHandler())
-                                .addLast(new IdleStateHandler(0, 3, 0))
-                                .addLast(new ChannelDuplexHandler() {
-                                    @Override
-                                    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-                                        IdleStateEvent event = (IdleStateEvent) evt;
-                                        if (IdleState.WRITER_IDLE.equals(event.state())) {
-                                            // 太久没写出信息，发送心跳
-                                            ctx.writeAndFlush(new PingMessage(0, "zhangsan"));
-                                        }
-                                    }
-                                })
+//                                .addLast(new IdleStateHandler(0, 3, 0))
+//                                .addLast(new ChannelDuplexHandler() {
+//                                    @Override
+//                                    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+//                                        IdleStateEvent event = (IdleStateEvent) evt;
+//                                        if (IdleState.WRITER_IDLE.equals(event.state())) {
+//                                            // 太久没写出信息，发送心跳
+//                                            ctx.writeAndFlush(new PingMessage(0, "zhangsan"));
+//                                        }
+//                                    }
+//                                })
+                                // 登录等
                                 .addLast(new ChannelInboundHandlerAdapter() {
                                     @Override
                                     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -72,15 +69,40 @@ public class EventLoopClient {
                                             }
                                             if (LOGIN_SUCCESS.get()) {
                                                 log.info("登陆成功");
-                                                log.info("...业务代码");
+                                                // 发送远程调用
+                                                log.info("发送远程调用, 调用 sayHello 方法");
+                                                ctx.writeAndFlush(new RpcRequestMessage(
+                                                        0,
+                                                        "com.learning.netty.basic.inter.Communicate",
+                                                        "sayHello",
+                                                        new Class[]{String.class},
+                                                        new Object[]{username}
+                                                ));
+                                                log.info("发送远程调用, 调用 calcDiv 方法");
+                                                ctx.writeAndFlush(new RpcRequestMessage(
+                                                        1,
+                                                        "com.learning.netty.basic.inter.Calculate",
+                                                        "calcDiv",
+                                                        new Class[]{Integer.class, Integer.class},
+                                                        new Object[]{3, 0}  // 故意出错，用于测试
+                                                ));
+                                                log.info("发送远程调用, 调用 calcAdd 方法");
+                                                ctx.writeAndFlush(new RpcRequestMessage(
+                                                        1,
+                                                        "com.learning.netty.basic.inter.Calculate",
+                                                        "calcAdd",
+                                                        new Class[]{Integer.class, Integer.class},
+                                                        new Object[]{256, 256}
+                                                ));
                                             } else {
                                                 log.warn("账号或密码错误");
                                             }
-                                            log.info("关闭连接");
-                                            ctx.channel().close();
+//                                            log.info("关闭连接");
+//                                            ctx.channel().close();
                                         }).start();
                                     }
                                 })
+                                // 登录响应信息处理
                                 .addLast(new SimpleChannelInboundHandler<LoginResponseMessage>() {
                                     @Override
                                     protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginResponseMessage loginResponseMessage) throws Exception {
@@ -90,7 +112,9 @@ public class EventLoopClient {
                                         }
                                         LOGIN_LOCK.countDown();
                                     }
-                                });
+                                })
+                                // rpc调用响应信息处理
+                                .addLast(new RpcResponseMessageHandler());
                     }
                 })
                 .connect(new InetSocketAddress("127.0.0.1", 8080))
@@ -109,4 +133,5 @@ public class EventLoopClient {
         });
         channel.closeFuture().sync();
     }
+
 }
