@@ -13,7 +13,7 @@ public class LoginRequestMessageHandler extends SimpleChannelInboundHandler<Logi
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginRequestMessage loginRequestMessage) throws Exception {
         log.info("接收到登录请求 {}", loginRequestMessage);
-        LoginResponseMessage loginResponseMessage = new LoginResponseMessage(0, "zhangsan".equals(loginRequestMessage.getUsername()) && "123".equals(loginRequestMessage.getPassword()));
+        LoginResponseMessage loginResponseMessage = new LoginResponseMessage(loginRequestMessage.getSequenceId(), "zhangsan".equals(loginRequestMessage.getUsername()) && "123".equals(loginRequestMessage.getPassword()));
         log.info("返回登录结果 {}", loginResponseMessage);
         channelHandlerContext.writeAndFlush(loginResponseMessage);
     }
