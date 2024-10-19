@@ -1,4 +1,4 @@
-package com.learning.netty.protocol.domain;
+package com.learning.netty.protocol.message;
 
 import lombok.Data;
 
@@ -7,8 +7,8 @@ public class LoginRequestMessage extends Message {
     private final String username;
     private final String password;
 
-    public LoginRequestMessage(String username, String password) {
-        super(0, 0);
+    public LoginRequestMessage(Integer sequenceId, String username, String password) {
+        super(sequenceId, MessageType.LoginRequestMessage);
         this.username = username;
         this.password = password;
     }
