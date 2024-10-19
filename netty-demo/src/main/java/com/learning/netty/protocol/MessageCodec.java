@@ -72,11 +72,11 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
 
         int length = byteBuf.readInt();
 
-        ByteBuf buffer = channelHandlerContext.alloc().heapBuffer(length);
-        byteBuf.readBytes(buffer);
+        byte[] bytes = new byte[length];
+        byteBuf.readBytes(bytes);
         Algorithm algorithm = Algorithm.values()[serializationType];
         log.info("algorithm: {}", algorithm);
-        Object message = algorithm.deserialize(buffer.array(), Message.getMessageClass(messageType));
+        Object message = algorithm.deserialize(bytes, Message.getMessageClass(messageType));
 
         list.add(message);
         log.info("magicNumber: {}, version: {}, serializationType: {}, sequenceId: {}, messageType: {}", magicNumber, version, serializationType, sequenceId, messageType);
