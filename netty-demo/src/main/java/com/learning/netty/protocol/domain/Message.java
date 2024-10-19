@@ -21,6 +21,8 @@ public class Message implements Serializable {
                 return LoginRequestMessage.class;
             case 1:
                 return LoginResponseMessage.class;
+            case 2:
+                return PingMessage.class;
         }
         return null;
     }
