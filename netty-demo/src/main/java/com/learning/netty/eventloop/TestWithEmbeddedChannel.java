@@ -4,8 +4,8 @@ import com.learning.netty.config.Config;
 import com.learning.netty.protocol.Algorithm;
 import com.learning.netty.protocol.MessageCodec;
 import com.learning.netty.protocol.MyFrameDecoder;
-import com.learning.netty.protocol.domain.LoginRequestMessage;
-import com.learning.netty.protocol.domain.Message;
+import com.learning.netty.protocol.message.LoginRequestMessage;
+import com.learning.netty.protocol.message.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -20,9 +20,9 @@ public class TestWithEmbeddedChannel {
                 new MessageCodec()
         );
 
-        channel.writeOutbound(new LoginRequestMessage("zhangsan", "123"));
+        channel.writeOutbound(new LoginRequestMessage(0, "zhangsan", "123"));
         System.out.println("=====================================================================");
-        ByteBuf buf = getInput(new LoginRequestMessage("zhangsan", "123"));
+        ByteBuf buf = getInput(new LoginRequestMessage(0, "zhangsan", "123"));
         channel.writeInbound(buf);
     }
 
@@ -32,7 +32,7 @@ public class TestWithEmbeddedChannel {
         buffer.writeByte(1);
         Algorithm algorithm = Config.getAlgorithm();
         buffer.writeByte(algorithm.ordinal());
-        buffer.writeByte(message.getType());
+        buffer.writeByte(message.getMessageType().ordinal());
         buffer.writeInt(message.getSequenceId());
         buffer.writeByte(0xff);
         byte[] bytes = algorithm.serialize(message);

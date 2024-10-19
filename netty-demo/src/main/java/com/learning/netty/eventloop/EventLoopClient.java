@@ -2,9 +2,9 @@ package com.learning.netty.eventloop;
 
 import com.learning.netty.protocol.MessageCodec;
 import com.learning.netty.protocol.MyFrameDecoder;
-import com.learning.netty.protocol.domain.LoginRequestMessage;
-import com.learning.netty.protocol.domain.LoginResponseMessage;
-import com.learning.netty.protocol.domain.PingMessage;
+import com.learning.netty.protocol.message.LoginRequestMessage;
+import com.learning.netty.protocol.message.LoginResponseMessage;
+import com.learning.netty.protocol.message.PingMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -46,7 +46,7 @@ public class EventLoopClient {
                                         IdleStateEvent event = (IdleStateEvent) evt;
                                         if (IdleState.WRITER_IDLE.equals(event.state())) {
                                             // 太久没写出信息，发送心跳
-                                            ctx.writeAndFlush(new PingMessage("zhangsan"));
+                                            ctx.writeAndFlush(new PingMessage(0, "zhangsan"));
                                         }
                                     }
                                 })
@@ -61,7 +61,7 @@ public class EventLoopClient {
                                             String username = scanner.nextLine();
                                             System.out.print("请输入密码: ");
                                             String password = scanner.nextLine();
-                                            LoginRequestMessage loginRequestMessage = new LoginRequestMessage(username, password);
+                                            LoginRequestMessage loginRequestMessage = new LoginRequestMessage(0, username, password);
                                             ctx.writeAndFlush(loginRequestMessage);
                                             log.info("发送登录请求，等待登录结果");
                                             // 等待read事件接收到服务端的返回结果

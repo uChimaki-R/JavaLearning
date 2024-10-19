@@ -1,7 +1,8 @@
 package com.learning.netty.protocol;
 
 import com.learning.netty.config.Config;
-import com.learning.netty.protocol.domain.Message;
+import com.learning.netty.protocol.message.Message;
+import com.learning.netty.protocol.message.MessageType;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -37,7 +38,7 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         log.info("algorithm: {}", algorithm);
         buffer.writeByte(algorithm.ordinal());
         // 1字节 信息类型
-        buffer.writeByte(message.getType());
+        buffer.writeByte(message.getMessageType().ordinal());
         // 4字节 信息的序列号（信息可能是分割异步发送的，异步接收后需要根据序列号重组消息）
         buffer.writeInt(message.getSequenceId());
 
@@ -76,7 +77,7 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         byteBuf.readBytes(bytes);
         Algorithm algorithm = Algorithm.values()[serializationType];
         log.info("algorithm: {}", algorithm);
-        Object message = algorithm.deserialize(bytes, Message.getMessageClass(messageType));
+        Object message = algorithm.deserialize(bytes, Message.getMessageClass(MessageType.values()[messageType]));
 
         list.add(message);
         log.info("magicNumber: {}, version: {}, serializationType: {}, sequenceId: {}, messageType: {}", magicNumber, version, serializationType, sequenceId, messageType);
