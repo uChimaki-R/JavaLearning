@@ -1,10 +1,10 @@
 package com.learning.netty.protocol.domain;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
 public class LoginResponseMessage extends Message {
-    private  Boolean success;
+    private final Boolean success;
 
     public LoginResponseMessage(Boolean success) {
         super(1, 1);
