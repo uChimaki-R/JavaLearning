@@ -4,10 +4,15 @@ import com.learning.netty.protocol.MessageCodec;
 import com.learning.netty.protocol.MyFrameDecoder;
 import com.learning.netty.protocol.domain.LoginRequestMessage;
 import com.learning.netty.protocol.domain.LoginResponseMessage;
+import com.learning.netty.protocol.domain.PingMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -31,7 +36,20 @@ public class EventLoopClient {
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         nioSocketChannel.pipeline()
                                 .addLast(new MyFrameDecoder())
+                                .addLast(new LoggingHandler())
                                 .addLast(new MessageCodec())
+                                .addLast(new LoggingHandler())
+                                .addLast(new IdleStateHandler(0, 3, 0))
+                                .addLast(new ChannelDuplexHandler() {
+                                    @Override
+                                    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+                                        IdleStateEvent event = (IdleStateEvent) evt;
+                                        if (IdleState.WRITER_IDLE.equals(event.state())) {
+                                            // 太久没写出信息，发送心跳
+                                            ctx.writeAndFlush(new PingMessage("zhangsan"));
+                                        }
+                                    }
+                                })
                                 .addLast(new ChannelInboundHandlerAdapter() {
                                     @Override
                                     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -61,7 +79,6 @@ public class EventLoopClient {
                                             log.info("关闭连接");
                                             ctx.channel().close();
                                         }).start();
-                                        super.channelActive(ctx);
                                     }
                                 })
                                 .addLast(new SimpleChannelInboundHandler<LoginResponseMessage>() {
@@ -86,10 +103,10 @@ public class EventLoopClient {
             public void operationComplete(ChannelFuture channelFuture) throws Exception {
                 // 需要把事件循环组关闭，主进程才会结束
                 group.shutdownGracefully();
+                LOGIN_LOCK.countDown();
                 log.info("channel closed");
             }
         });
-
         channel.closeFuture().sync();
     }
 }
