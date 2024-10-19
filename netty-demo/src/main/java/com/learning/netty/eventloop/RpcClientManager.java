@@ -1,8 +1,10 @@
 package com.learning.netty.eventloop;
 
+import com.learning.netty.basic.inter.Calculate;
 import com.learning.netty.handler.RpcResponseMessageHandler;
 import com.learning.netty.protocol.MessageCodec;
 import com.learning.netty.protocol.MyFrameDecoder;
+import com.learning.netty.protocol.SequenceIdGenerator;
 import com.learning.netty.protocol.message.RpcRequestMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -10,6 +12,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
 
+import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
 
 public class RpcClientManager {
@@ -17,13 +20,38 @@ public class RpcClientManager {
     private static final Object LOCK = new Object();
 
     public static void main(String[] args) {
-        getChannel().writeAndFlush(new RpcRequestMessage(
-                                                        0,
-                                                        "com.learning.netty.basic.inter.Communicate",
-                                                        "sayHello",
-                                                        new Class[]{String.class},
-                                                        new Object[]{"zhangsan"}
-                                                ));
+//        getChannel().writeAndFlush(new RpcRequestMessage(
+//                0,
+//                "com.learning.netty.basic.inter.Communicate",
+//                "sayHello",
+//                new Class[]{String.class},
+//                new Object[]{"zhangsan"}
+//        ));
+        Calculate calc = getProxy(Calculate.class);
+        calc.calcAdd(256, 256);
+    }
+
+    /**
+     * 获取代理对象，拥有的接口和传入的接口一致，但是将内部的实现改为发送rpc请求来获取结果
+     */
+    public static <T> T getProxy(Class<T> clazz) {
+        // 获取代理对象，把对象转回T类
+        return clazz.cast(
+                Proxy.newProxyInstance(
+                        clazz.getClassLoader(),
+                        new Class[]{clazz},
+                        (proxy, method, args) -> {
+                            getChannel().writeAndFlush(new RpcRequestMessage(
+                                    SequenceIdGenerator.nextSequenceId(),
+                                    clazz.getName(),
+                                    method.getName(),
+                                    method.getParameterTypes(),
+                                    args
+                            ));
+                            // 暂时先只发送信息，不接收结果
+                            return null;
+                        })
+        );
     }
 
     /**
