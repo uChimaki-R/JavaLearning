@@ -11,13 +11,19 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.concurrent.DefaultPromise;
+import io.netty.util.concurrent.Promise;
 
 import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RpcClientManager {
     private static Channel channel;
     private static final Object LOCK = new Object();
+    // 代理对象发送rpc请求时向map中添加序列id对应的promise对象并阻塞等待结果，handler处理完毕后向序列id对应的promise对象存入结果，让代理方法继续运行返回结果。
+    public static final Map<Integer, Promise<Object>> PROMISES = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
 //        getChannel().writeAndFlush(new RpcRequestMessage(
@@ -28,7 +34,8 @@ public class RpcClientManager {
 //                new Object[]{"zhangsan"}
 //        ));
         Calculate calc = getProxy(Calculate.class);
-        calc.calcAdd(256, 256);
+        System.out.println("结果是: " + calc.calcAdd(256, 256));
+        System.out.println("结果是: " + calc.calcDiv(1, 0));  // 故意出错
     }
 
     /**
@@ -41,15 +48,26 @@ public class RpcClientManager {
                         clazz.getClassLoader(),
                         new Class[]{clazz},
                         (proxy, method, args) -> {
+                            Integer sequenceId = SequenceIdGenerator.nextSequenceId();
                             getChannel().writeAndFlush(new RpcRequestMessage(
-                                    SequenceIdGenerator.nextSequenceId(),
+                                    sequenceId,
                                     clazz.getName(),
                                     method.getName(),
                                     method.getParameterTypes(),
                                     args
                             ));
-                            // 暂时先只发送信息，不接收结果
-                            return null;
+                            // 存入Promise对象等待请求结果
+                            // 定义Promise对象时参数需要一个线程对象，该线程的作用: 作为使用promise.addListener()定义异步获取结果的时候执行该异步逻辑的线程
+                            // 因为这里是同步调用等待结果，所以实际上这个参数里的线程没有用到，但是他就是需要一个线程对象来初始化，这里使用channel的线程对象
+                            DefaultPromise<Object> promise = new DefaultPromise<>(getChannel().eventLoop());
+                            PROMISES.put(sequenceId, promise);
+                            // 等待结果
+                            promise.await();
+                            if (promise.isSuccess()) {
+                                return promise.getNow();
+                            } else {
+                                throw new Exception(promise.cause().getMessage());
+                            }
                         })
         );
     }
