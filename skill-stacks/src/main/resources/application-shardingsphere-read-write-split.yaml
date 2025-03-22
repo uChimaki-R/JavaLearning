@@ -1,0 +1,83 @@
+# web port
+server:
+  port: 8081
+
+## sharding-jdbc
+spring:
+  shardingsphere:
+    # 全局参数
+    props:
+      # 展示逻辑sql和实际sql
+      sql-show: true
+
+    # 配置真实库（库先创建出来），起别名配置，内容和正常的mysql数据库配置一样
+    datasource:
+      names: m0,m1
+      m0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+      m1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db2?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+
+    rules:
+      sharding:
+        # 配置主键算法，后面配置每个表的算法会引用这里的名字
+        key-generators:
+          # 主键算法（名字自己起）
+          alg_snowflake:
+            type: SNOWFLAKE
+            props:
+              worker-id:
+                1
+        # 配置了分表算法，选择了读写库后根据分表算法选择要写/读的表
+        # 如果配置分库算法会报错 No database route info
+        # 我的想法是：插入的时候先找到配置的写库（不知能不能配多个写库），按分库策略找到指定库，按分表策略找到指定表
+        #           查找时先找到配置的读库，按分库策略找到指定库，按分表策略找到指定表
+        # 但是无论是读还是写，配置了分库策略都会报上面的错，我不清楚了，暂时不知道怎么改才能支持分库策略
+        # 但是分表策略是测试可行的，也就是说我可以指定rw_db.course_${1..2}，而不用指明如rw_db.course_1
+        sharding-algorithms:
+          # 分表算法（名字自己起）
+          alg_course_table:
+            type: INLINE
+            props:
+              algorithm-expression:
+                course_$->{cid%2+1}
+
+        # 配置逻辑表的信息
+        tables:
+          # course逻辑表
+          course:
+            # 对应的真实表
+            # 使用读写分离，则需要配置一个逻辑库（下面会配置这个库中的读库和写库），这里进行了分表操作
+            actual-data-nodes: rw_db.course_${1..2}
+            # 使用的主键生成算法
+            key-generate-strategy:
+              column: cid
+              key-generator-name: alg_snowflake
+            # 使用的分表策略
+            table-strategy:
+              standard:
+                sharding-column: cid
+                sharding-algorithm-name: alg_course_table
+      readwrite-splitting:
+        # 负载均衡算法
+        load-balancers:
+          lb_rw_db:
+            type: ROUND_ROBIN
+            # RANDOM TRANSACTION_ROUND_ROBIN TRANSACTION_RANDOM FIXED_PRIMARY
+        # 数据源
+        data-sources:
+          rw_db:
+            static-strategy:
+              write-data-source-name: m0
+              read-data-source-names:
+                - m1
+            load-balancer-name:
+              lb_rw_db
