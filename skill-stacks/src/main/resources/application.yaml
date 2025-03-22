@@ -69,16 +69,16 @@ spring:
                 2
           # 分表算法（名字自己起）
           alg_course_table:
-#            # 指定算法类型为CLASS_BASED
-#            type: CLASS_BASED
-#            props:
-#              strategy:
-#                # 指定该分片类型为 STANDARD | COMPLEX | HINT
-#                # 不同的分片类型需要实现不同的接口
-#                COMPLEX
-#              algorithmClassName:
-#                # 配置实现类全路径
-#                shardingJDBC.classBased.algorithm.MyComplexAlgorithm
+            #            # 指定算法类型为CLASS_BASED
+            #            type: CLASS_BASED
+            #            props:
+            #              strategy:
+            #                # 指定该分片类型为 STANDARD | COMPLEX | HINT
+            #                # 不同的分片类型需要实现不同的接口
+            #                COMPLEX
+            #              algorithmClassName:
+            #                # 配置实现类全路径
+            #                shardingJDBC.classBased.algorithm.MyComplexAlgorithm
             type: HINT_INLINE
             props:
               algorithm-expression:
@@ -111,8 +111,27 @@ spring:
               #              standard:
               #                sharding-column: cid
               #                sharding-algorithm-name: alg_course_table
-#              complex:
-#                sharding-columns: cid, c_status
-#                sharding-algorithm-name: alg_course_table
+              #              complex:
+              #                sharding-columns: cid, c_status
+              #                sharding-algorithm-name: alg_course_table
               hint:
                 sharding-algorithm-name: alg_course_table
+      # 加密字段，业务层就无需编写加密逻辑，查询也直接使用明文查询（感觉作用不大，毕竟前端也要加密发送的，或许可以二重加密）
+      encrypt:
+        # 配置加密器，后面对表的配置也是引用这里的名字
+        encryptors:
+          enc_course_cname:
+            type: SM3
+            props:
+              sm3-salt:
+                12345678
+        tables:
+          # 配置course表的cname字段
+          course:
+            columns:
+              cname:
+#                plain-column: cname
+                # 加密后存放的字段，指定原来的字段覆盖
+                cipher-column: cname
+                # 加密算法
+                encryptor-name: enc_course_cname
