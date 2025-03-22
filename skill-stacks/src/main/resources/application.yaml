@@ -69,16 +69,20 @@ spring:
                 2
           # 分表算法（名字自己起）
           alg_course_table:
-            # 指定算法类型为CLASS_BASED
-            type: CLASS_BASED
+#            # 指定算法类型为CLASS_BASED
+#            type: CLASS_BASED
+#            props:
+#              strategy:
+#                # 指定该分片类型为 STANDARD | COMPLEX | HINT
+#                # 不同的分片类型需要实现不同的接口
+#                COMPLEX
+#              algorithmClassName:
+#                # 配置实现类全路径
+#                shardingJDBC.classBased.algorithm.MyComplexAlgorithm
+            type: HINT_INLINE
             props:
-              strategy:
-                # 指定该分片类型为 STANDARD | COMPLEX | HINT
-                # 不同的分片类型需要实现不同的接口
-                COMPLEX
-              algorithmClassName:
-                # 配置实现类全路径
-                shardingJDBC.classBased.algorithm.MyComplexAlgorithm
+              algorithm-expression:
+                course_${value}
         key-generators:
           # 主键算法（名字自己起）
           alg_snowflake:
@@ -107,6 +111,8 @@ spring:
               #              standard:
               #                sharding-column: cid
               #                sharding-algorithm-name: alg_course_table
-              complex:
-                sharding-columns: cid, c_status
+#              complex:
+#                sharding-columns: cid, c_status
+#                sharding-algorithm-name: alg_course_table
+              hint:
                 sharding-algorithm-name: alg_course_table
