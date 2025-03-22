@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Version: 1.0
  */
 @SpringBootApplication
-@MapperScan("shardingJDBC.standard.mapper")
+@MapperScan("shardingJDBC.mapper")
 public class StandardApplication {
     public static void main(String[] args) {
         SpringApplication.run(StandardApplication.class, args);

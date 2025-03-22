@@ -1,8 +1,8 @@
-package shardingJDBC.standard.mapper;
+package shardingJDBC.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import shardingJDBC.standard.po.Course;
+import shardingJDBC.po.Course;
 
 /**
 * @Author: Ray-C

@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import shardingJDBC.standard.mapper.CourseMapper;
-import shardingJDBC.standard.po.Course;
+import shardingJDBC.mapper.CourseMapper;
+import shardingJDBC.po.Course;
 
 import javax.annotation.Resource;
 

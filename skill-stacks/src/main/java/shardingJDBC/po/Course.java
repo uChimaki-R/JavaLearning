@@ -1,4 +1,4 @@
-package shardingJDBC.standard.po;
+package shardingJDBC.po;
 
 import lombok.Data;
 
