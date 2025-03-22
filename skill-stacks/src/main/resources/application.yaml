@@ -16,7 +16,7 @@ xxl:
   job:
     admin:
       addresses: http://127.0.0.1:7070/xxl-job-admin
-    ### xxl-job, access token
+      ### xxl-job, access token
       accessToken: default_token
     ### xxl-job executor appname
     executor:
@@ -69,10 +69,16 @@ spring:
                 2
           # 分表算法（名字自己起）
           alg_course_table:
-            type: INLINE
+            # 指定算法类型为CLASS_BASED
+            type: CLASS_BASED
             props:
-              algorithm-expression:
-                course_$->{cid%2+1}
+              strategy:
+                # 指定该分片类型为 STANDARD | COMPLEX | HINT
+                # 不同的分片类型需要实现不同的接口
+                COMPLEX
+              algorithmClassName:
+                # 配置实现类全路径
+                shardingJDBC.classBased.algorithm.MyComplexAlgorithm
         key-generators:
           # 主键算法（名字自己起）
           alg_snowflake:
@@ -98,6 +104,9 @@ spring:
                 sharding-algorithm-name: alg_course_database
             # 使用的分表策略
             table-strategy:
-              standard:
-                sharding-column: cid
+              #              standard:
+              #                sharding-column: cid
+              #                sharding-algorithm-name: alg_course_table
+              complex:
+                sharding-columns: cid, c_status
                 sharding-algorithm-name: alg_course_table
