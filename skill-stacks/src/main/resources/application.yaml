@@ -2,35 +2,6 @@
 server:
   port: 8081
 
-# no web
-# spring:
-#   main:
-#     web-environment: false
-
-# log config
-logging:
-  config: classpath:logback.xml
-
-### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
-xxl:
-  job:
-    admin:
-      addresses: http://127.0.0.1:7070/xxl-job-admin
-      ### xxl-job, access token
-      accessToken: default_token
-    ### xxl-job executor appname
-    executor:
-      appname: xxl-job-test-executor
-      ### xxl-job executor registry-address: default use address to registry , otherwise use ip:port if address is null
-      address:
-      ### xxl-job executor server-info
-      ip:
-      port: 9999
-      ### xxl-job executor log-path
-      logpath: /logs/xxl-job/jobhandler
-      ### xxl-job executor log-retention-days
-      logretentiondays: 30
-
 ## sharding-jdbc
 spring:
   shardingsphere:
@@ -55,34 +26,9 @@ spring:
         username: root
         password: 123456
 
-    # 配置各种分库分表相关的规则，规则（算法）的名字在后面对每个逻辑表的配置中会用到
     rules:
       sharding:
-        # 配置分库/分表算法和主键算法，后面配置每个表的算法会引用这里的名字
-        # 分库/分表算法
-        sharding-algorithms:
-          # 分库算法（名字自己起）
-          alg_course_database:
-            type: MOD
-            props:
-              sharding-count:
-                2
-          # 分表算法（名字自己起）
-          alg_course_table:
-            #            # 指定算法类型为CLASS_BASED
-            #            type: CLASS_BASED
-            #            props:
-            #              strategy:
-            #                # 指定该分片类型为 STANDARD | COMPLEX | HINT
-            #                # 不同的分片类型需要实现不同的接口
-            #                COMPLEX
-            #              algorithmClassName:
-            #                # 配置实现类全路径
-            #                shardingJDBC.classBased.algorithm.MyComplexAlgorithm
-            type: HINT_INLINE
-            props:
-              algorithm-expression:
-                course_${value}
+        # 配置主键算法，后面配置每个表的算法会引用这里的名字
         key-generators:
           # 主键算法（名字自己起）
           alg_snowflake:
@@ -90,48 +36,43 @@ spring:
             props:
               worker-id:
                 1
+        # 分库/分表算法
+        sharding-algorithms:
+          # 分表算法（名字自己起）
+          alg_course_table:
+            type: INLINE
+            props:
+              algorithm-expression:
+                course_$->{cid%2+1}
 
         # 配置逻辑表的信息
         tables:
           # course逻辑表
           course:
             # 对应的真实表
-            actual-data-nodes: m${0..1}.course_${1..2}
+            # 使用读写分离，则需要配置一个逻辑库（下面会配置这个库中的读库和写库）
+            actual-data-nodes: rw_db.course_${1..2}
             # 使用的主键生成算法
             key-generate-strategy:
               column: cid
               key-generator-name: alg_snowflake
-            # 使用的分库策略
-            database-strategy:
-              standard:
-                sharding-column: cid
-                sharding-algorithm-name: alg_course_database
             # 使用的分表策略
             table-strategy:
-              #              standard:
-              #                sharding-column: cid
-              #                sharding-algorithm-name: alg_course_table
-              #              complex:
-              #                sharding-columns: cid, c_status
-              #                sharding-algorithm-name: alg_course_table
-              hint:
+              standard:
+                sharding-column: cid
                 sharding-algorithm-name: alg_course_table
-      # 加密字段，业务层就无需编写加密逻辑，查询也直接使用明文查询（感觉作用不大，毕竟前端也要加密发送的，或许可以二重加密）
-      encrypt:
-        # 配置加密器，后面对表的配置也是引用这里的名字
-        encryptors:
-          enc_course_cname:
-            type: SM3
-            props:
-              sm3-salt:
-                12345678
-        tables:
-          # 配置course表的cname字段
-          course:
-            columns:
-              cname:
-#                plain-column: cname
-                # 加密后存放的字段，指定原来的字段覆盖
-                cipher-column: cname
-                # 加密算法
-                encryptor-name: enc_course_cname
+      readwrite-splitting:
+        # 负载均衡算法
+        load-balancers:
+          lb_rw_db:
+            type: ROUND_ROBIN
+            # RANDOM TRANSACTION_ROUND_ROBIN TRANSACTION_RANDOM FIXED_PRIMARY
+        # 数据源
+        data-sources:
+          rw_db:
+            static-strategy:
+              write-data-source-name: m0
+              read-data-source-names:
+                - m1
+            load-balancer-name:
+              lb_rw_db
