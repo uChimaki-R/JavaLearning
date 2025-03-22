@@ -45,4 +45,33 @@ public class ClassBasedTest {
         // 基于ThreadLocal，需要close释放内存，也可以用try-resource包围自动close
         hintManager.close();
     }
+
+    @Test
+    public void encryptTest() {
+        HintManager hintManager = HintManager.getInstance();
+        // 指定从course_1获取
+        hintManager.addTableShardingValue("course", "1");
+
+        // 插入测试
+        Course course = new Course();
+        // 明文插入
+        course.setCname("origin course name");
+        course.setCStatus(2);
+        courseMapper.insert(course);
+
+        // cid不会回填，cname也不会变成加密后的内容
+        System.out.println("cid: " + course.getCid()); // null
+        System.out.println("cname: " + course.getCname()); // origin course name
+
+        // 查询测试
+        QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
+        // 明文查询
+        queryWrapper.lambda()
+                .eq(Course::getCname, "origin course name");
+        Course c = courseMapper.selectOne(queryWrapper);
+        System.out.println(c);
+
+        // 基于ThreadLocal，需要close释放内存，也可以用try-resource包围自动close
+        hintManager.close();
+    }
 }
