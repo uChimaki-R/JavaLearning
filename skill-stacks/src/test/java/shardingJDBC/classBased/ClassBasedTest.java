@@ -1,6 +1,7 @@
 package shardingJDBC.classBased;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.shardingsphere.infra.hint.HintManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import shardingJDBC.mapper.CourseMapper;
@@ -32,5 +33,16 @@ public class ClassBasedTest {
                 .le(Course::getCStatus, -1);
         List<Course> courses = courseMapper.selectList(queryWrapper);
         System.out.println(courses);
+    }
+
+    @Test
+    public void hintTest() {
+        HintManager hintManager = HintManager.getInstance();
+        // 指定从course_1获取
+        hintManager.addTableShardingValue("course", "1");
+        List<Course> allCourse = courseMapper.selectList(null);
+        System.out.println(allCourse);
+        // 基于ThreadLocal，需要close释放内存，也可以用try-resource包围自动close
+        hintManager.close();
     }
 }
