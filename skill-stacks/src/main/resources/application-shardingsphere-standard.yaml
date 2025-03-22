@@ -1,0 +1,73 @@
+# web port
+server:
+  port: 8081
+## sharding-jdbc
+spring:
+  shardingsphere:
+    # 全局参数
+    props:
+      # 展示逻辑sql和实际sql
+      sql-show: true
+
+    # 配置真实库（库先创建出来），起别名配置，内容和正常的mysql数据库配置一样
+    datasource:
+      names: m0,m1
+      m0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+      m1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/sharding_db2?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+
+    # 配置各种分库分表相关的规则，规则（算法）的名字在后面对每个逻辑表的配置中会用到
+    rules:
+      sharding:
+        # 配置分库/分表算法和主键算法，后面配置每个表的算法会引用这里的名字
+        # 分库/分表算法
+        sharding-algorithms:
+          # 分库算法（名字自己起）
+          alg_course_database:
+            type: MOD
+            props:
+              sharding-count:
+                2
+          # 分表算法（名字自己起）
+          alg_course_table:
+            type: INLINE
+            props:
+              algorithm-expression:
+                course_$->{cid%2+1}
+        key-generators:
+          # 主键算法（名字自己起）
+          alg_snowflake:
+            type: SNOWFLAKE
+            props:
+              worker-id:
+                1
+
+        # 配置逻辑表的信息
+        tables:
+          # course逻辑表
+          course:
+            # 对应的真实表
+            actual-data-nodes: m${0..1}.course_${1..2}
+            # 使用的主键生成算法
+            key-generate-strategy:
+              column: cid
+              key-generator-name: alg_snowflake
+            # 使用的分库策略
+            database-strategy:
+              standard:
+                sharding-column: cid
+                sharding-algorithm-name: alg_course_database
+            # 使用的分表策略
+            table-strategy:
+              standard:
+                sharding-column: cid
+                sharding-algorithm-name: alg_course_table
