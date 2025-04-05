@@ -1,0 +1,13 @@
+server:
+  port: 8081
+dubbo:
+  application:
+    name: consumer-app
+    # 单机里多个dubbo应用这个也会冲突
+    qos-port: 22223
+  #  protocol:
+  #    name: dubbo
+  #    指定协议端口时也不能冲突
+  #    port: 20881
+  registry:
+    address: zookeeper://centos135:2181
