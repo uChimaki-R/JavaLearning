@@ -1,0 +1,10 @@
+curator:
+  connect-string: centos135:2181
+  namespace: refresh-test
+  session-timeout-ms: 60_000
+  connection-timeout-ms: 40_000
+  base-sleep-time-ms: 2_000
+  max-retries: 3
+refresh:
+  value1: 111
+  value2: 222
